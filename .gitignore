@@ -46,6 +46,9 @@ logs/
 out/
 build/
 
+# Local config (contains sensitive data)
+application-local.yml
+
 # Temp
 *.tmp
 *.temp
