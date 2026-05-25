@@ -8,6 +8,11 @@ const routes = [
     redirect: '/waterSituation/list',
     children: [
       {
+        path: 'data-exploration',
+        name: 'DataExploration',
+        component: () => import('../views/DataExploration.vue')
+      },
+      {
         path: 'waterSituation/list',
         name: 'WaterSituationList',
         component: () => import('../views/waterSituation/List.vue')
