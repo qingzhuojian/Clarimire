@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>环境巡查</title>
+    <base href="/" />
+    <link rel="stylesheet" href="/src/styles/common.scss" />
+    <!-- Leaflet 免费地图 -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        width: 100%;
+        height: 100vh;
+        background: #1a1a1a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      /* 手机外框模型 - 全黑色外框 */
+      .phone-frame {
+        width: 320px;
+        height: 640px;
+        background: transparent;
+        border-radius: 45px;
+        padding: 0;
+        box-shadow: 
+          0 0 0 4px #2a2a2a,
+          0 50px 150px rgba(0, 0, 0, 0.5);
+        position: relative;
+      }
+
+      /* 登录页面时外框也透明 */
+      .phone-frame:has(.page-login) {
+        background: transparent;
+        box-shadow: 
+          0 0 0 3px #000000,
+          0 50px 150px rgba(0, 0, 0, 0.3);
+      }
+
+      /* 手机侧边按键 */
+      .phone-frame::before {
+        content: '';
+        position: absolute;
+        left: -3px;
+        top: 120px;
+        width: 4px;
+        height: 30px;
+        background: #000000;
+        border-radius: 2px 0 0 2px;
+      }
+
+      .phone-frame::after {
+        content: '';
+        position: absolute;
+        right: -3px;
+        top: 180px;
+        width: 4px;
+        height: 60px;
+        background: #2a2a2a;
+        border-radius: 0 2px 2px 0;
+      }
+
+      /* 手机内屏幕 */
+      .phone-screen {
+        width: 100%;
+        height: 100%;
+        background: #060e1f;
+        border-radius: 45px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 0 0 12px #2a2a2a;
+      }
+
+      /* 登录页面时手机屏幕透明 */
+      .phone-screen:has(.page-login) {
+        background: transparent;
+      }
+
+      #app {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* 登录页面时 #app 透明 */
+      .phone-screen .page-login ~ #app,
+      #app:has(.page-login) {
+        background: transparent !important;
+      }
+
+      /* 页面内容 */
+      uni-page-body,
+      .uni-page-body {
+        height: 100% !important;
+        overflow: auto !important;
+      }
+
+      page {
+        height: 100% !important;
+        overflow: auto !important;
+      }
+
+      /* 登录页面背景透明 */
+      uni-page-body:has(.page-login),
+      .uni-page-body:has(.page-login),
+      page:has(.page-login) {
+        background: transparent !important;
+      }
+    </style>
+  <body>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div id="app"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+    <script>
+      // 等待 uni-app 渲染完成后，将 tabbar 移出 #app
+      setTimeout(function() {
+        var tabbar = document.querySelector('uni-tabbar') || document.querySelector('.uni-tabbar');
+        var container = document.querySelector('.phone-tabbar-container');
+        if (tabbar && container) {
+          container.appendChild(tabbar);
+        }
+      }, 1000);
+    </script>
+  </body>
+</html>

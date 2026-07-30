@@ -1,0 +1,139 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "首页",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/inspection-records/inspection-records",
+      "style": {
+        "navigationBarTitleText": "巡查记录",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/tasks/tasks",
+      "style": {
+        "navigationBarTitleText": "巡查任务",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/notifications/notifications",
+      "style": {
+        "navigationBarTitleText": "消息中心",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/report/report",
+      "style": {
+        "navigationBarTitleText": "问题上报",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/inspection-detail/inspection-detail",
+      "style": {
+        "navigationBarTitleText": "巡查详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/report-detail/report-detail",
+      "style": {
+        "navigationBarTitleText": "上报详情",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/settings/settings",
+      "style": {
+        "navigationBarTitleText": "个人设置",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/notification-settings/notification-settings",
+      "style": {
+        "navigationBarTitleText": "通知设置",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/map/map",
+      "style": {
+        "navigationBarTitleText": "巡查地图",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/feedback/feedback",
+      "style": {
+        "navigationBarTitleText": "已反馈",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/my-reports/my-reports",
+      "style": {
+        "navigationBarTitleText": "我的上报",
+        "enablePullDownRefresh": true
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "环境巡查",
+    "navigationBarBackgroundColor": "#02060f",
+    "backgroundColor": "#02060f"
+  },
+  "tabBar": {
+    "color": "#94a3b8",
+    "selectedColor": "#7dd3fc",
+    "borderStyle": "black",
+    "backgroundColor": "#02060f",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "/static/tabbar/home.png",
+        "selectedIconPath": "/static/tabbar/home-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "/static/tabbar/mine.png",
+        "selectedIconPath": "/static/tabbar/mine-active.png"
+      }
+    ]
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+      "^uni-(.*)-icons$": "@dcloudio/uni-ui/lib/uni-$1-icons/uni-$1-icons.vue"
+    }
+  },
+  "uniIdRouter": {}
+}

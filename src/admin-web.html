@@ -1,0 +1,2884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>环境巡查系统 - 管理后台</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --primary-light: #60a5fa;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-card-hover: #334155;
+      --bg-sidebar: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #334155;
+      --border-light: #475569;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* 登录页面 */
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2744 100%);
+      padding: 20px;
+    }
+
+    .login-box {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 48px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo .icon {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 16px;
+    }
+
+    .login-logo h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .login-logo p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+
+    /* 主布局 */
+    .main-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* 侧边栏 */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo .icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .sidebar-logo h2 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .sidebar-logo span {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      padding: 0 12px;
+      margin-bottom: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 4px;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+      color: var(--primary-light);
+      border-left: 3px solid var(--primary);
+      margin-left: -3px;
+    }
+
+    .nav-item .icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--danger);
+      color: white;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-dark);
+      border-radius: var(--radius-sm);
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .user-details h4 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .user-details p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* 主内容区 */
+    .main-content {
+      flex: 1;
+      margin-left: 260px;
+      min-height: 100vh;
+    }
+
+    /* 顶部栏 */
+    .topbar {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topbar h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      width: 280px;
+    }
+
+    .search-box input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-left: 8px;
+    }
+
+    .search-box input:focus {
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .topbar-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .topbar-btn:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .topbar-btn .count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--danger);
+      color: white;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    /* 内容区域 */
+    .content {
+      padding: 32px;
+    }
+
+    /* 统计卡片 */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 24px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-card:active {
+      transform: translateY(0);
+    }
+
+    .stat-click-hint {
+      font-size: 12px;
+      color: var(--primary-light);
+      margin-top: 8px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .stat-card:hover .stat-click-hint {
+      opacity: 1;
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .stat-header .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .stat-card:nth-child(1) .stat-header .icon {
+      background: rgba(59, 130, 246, 0.2);
+    }
+
+    .stat-card:nth-child(2) .stat-header .icon {
+      background: rgba(16, 185, 129, 0.2);
+    }
+
+    .stat-card:nth-child(3) .stat-header .icon {
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .stat-card:nth-child(4) .stat-header .icon {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .stat-trend {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .stat-trend.up {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+    }
+
+    .stat-trend.down {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* 图表区域 */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    .chart-container {
+      height: 280px;
+      display: flex;
+      align-items: flex-end;
+      gap: 16px;
+      padding: 20px 0;
+    }
+
+    .chart-bar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-bar-fill {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+      transition: height 0.5s ease;
+    }
+
+    .chart-bar-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* 饼图 */
+    .pie-chart {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .pie-legend {
+      flex: 1;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .legend-item .label {
+      flex: 1;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .legend-item .value {
+      font-weight: 600;
+    }
+
+    /* 表格 */
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      background: var(--bg-dark);
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    tbody tr:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-badge.success {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+    }
+
+    .status-badge.warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+    }
+
+    .status-badge.danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .status-badge.info {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--primary-light);
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-dark);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    .action-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    /* 分页 */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .pagination-info {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .pagination-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .page-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-dark);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .page-btn:hover,
+    .page-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* 模态框 */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.show .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      border: none;
+      background: var(--bg-dark);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* 表单 */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* 设置页面 */
+    .settings-section {
+      margin-bottom: 32px;
+    }
+
+    .settings-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .setting-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--border);
+      border-radius: 26px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: var(--primary);
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(22px);
+    }
+
+    /* 打卡记录 */
+    .clock-record {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-dark);
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+    }
+
+    .clock-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .clock-info {
+      flex: 1;
+    }
+
+    .clock-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .clock-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .clock-time {
+      text-align: right;
+    }
+
+    .clock-time .time {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .clock-time .status {
+      font-size: 12px;
+      color: var(--success);
+    }
+
+    /* 地图容器 */
+    .map-container {
+      height: 400px;
+      background: var(--bg-dark);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-placeholder {
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .map-placeholder .icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    /* 隐藏/显示页面 */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      transform: translateX(120%);
+      transition: transform 0.3s;
+      z-index: 2000;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.error {
+      border-left: 4px solid var(--danger);
+    }
+
+    /* 响应式 */
+    @media (max-width: 1200px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        padding: 16px;
+      }
+
+      .search-box {
+        display: none;
+      }
+
+      .content {
+        padding: 16px;
+      }
+    }
+
+    /* 消息中心样式 */
+    .notification-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .notification-item:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .notification-item.unread {
+      background: rgba(59, 130, 246, 0.05);
+      border-left: 3px solid var(--primary);
+    }
+
+    .notification-item.unread:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .notification-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      background: var(--bg-dark);
+    }
+
+    .notification-icon.danger {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .notification-icon.warning {
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .notification-icon.info {
+      background: rgba(59, 130, 246, 0.2);
+    }
+
+    .notification-icon.success {
+      background: rgba(16, 185, 129, 0.2);
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .notification-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .notification-time {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .notification-badge {
+      background: var(--danger);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    /* 详情弹窗样式 */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .detail-value {
+      color: var(--text-primary);
+    }
+
+    .detail-section {
+      margin-bottom: 20px;
+    }
+
+    .detail-section-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <!-- 登录页面 -->
+  <div id="login-page" class="login-container">
+    <div class="login-box">
+      <div class="login-logo">
+        <div class="icon">🌍</div>
+        <h1>环境巡查系统</h1>
+        <p>管理员后台管理系统</p>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" id="username" placeholder="请输入用户名" value="admin">
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" id="password" placeholder="请输入密码" value="admin123">
+        </div>
+        <button type="submit" class="btn btn-primary">登录</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 主页面 -->
+  <div id="main-app" class="main-layout" style="display: none;">
+    <!-- 侧边栏 -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="icon">🌍</div>
+          <div>
+            <h2>环境巡查</h2>
+            <span>管理系统</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">数据概览</div>
+          <div class="nav-item active" data-page="dashboard">
+            <span class="icon">📊</span>
+            <span>工作台</span>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">巡查管理</div>
+          <div class="nav-item" data-page="clock">
+            <span class="icon">📍</span>
+            <span>定位打卡</span>
+            <span class="badge">156</span>
+          </div>
+          <div class="nav-item" data-page="records">
+            <span class="icon">📋</span>
+            <span>巡查记录</span>
+          </div>
+          <div class="nav-item" data-page="problems">
+            <span class="icon">⚠️</span>
+            <span>待处理问题</span>
+            <span class="badge">23</span>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-title">系统管理</div>
+          <div class="nav-item" data-page="users">
+            <span class="icon">👥</span>
+            <span>用户管理</span>
+          </div>
+          <div class="nav-item" data-page="notifications">
+            <span class="icon">🔔</span>
+            <span>消息中心</span>
+            <span class="badge">3</span>
+          </div>
+          <div class="nav-item" data-page="settings">
+            <span class="icon">⚙️</span>
+            <span>系统设置</span>
+          </div>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">管</div>
+          <div class="user-details">
+            <h4 id="admin-name">管理员</h4>
+            <p>系统管理员</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+      <!-- 顶部栏 -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 id="page-title">工作台</h1>
+        </div>
+        <div class="topbar-right">
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" placeholder="搜索用户、记录...">
+          </div>
+          <button class="topbar-btn" onclick="switchPage('notifications')">
+            🔔
+            <span class="count">3</span>
+          </button>
+          <button class="topbar-btn" id="logout-btn">
+            🚪
+          </button>
+        </div>
+      </header>
+
+      <!-- 内容区域 -->
+      <div class="content">
+        <!-- 工作台页面 -->
+        <div id="page-dashboard" class="page active">
+          <!-- 统计卡片 -->
+          <div class="stats-grid">
+            <div class="stat-card clickable" onclick="switchPage('users')">
+              <div class="stat-header">
+                <div class="icon">👥</div>
+                <span class="stat-trend up">+12%</span>
+              </div>
+              <div class="stat-value">1,234</div>
+              <div class="stat-label">总用户数</div>
+              <div class="stat-click-hint">点击查看详情 →</div>
+            </div>
+            <div class="stat-card clickable" onclick="switchPage('clock')">
+              <div class="stat-header">
+                <div class="icon">📍</div>
+                <span class="stat-trend up">+8%</span>
+              </div>
+              <div class="stat-value">3,456</div>
+              <div class="stat-label">今日打卡</div>
+              <div class="stat-click-hint">点击查看详情 →</div>
+            </div>
+            <div class="stat-card clickable" onclick="switchPage('records')">
+              <div class="stat-header">
+                <div class="icon">📋</div>
+                <span class="stat-trend down">-3%</span>
+              </div>
+              <div class="stat-value">892</div>
+              <div class="stat-label">巡查记录</div>
+              <div class="stat-click-hint">点击查看详情 →</div>
+            </div>
+            <div class="stat-card clickable" onclick="switchPage('problems')">
+              <div class="stat-header">
+                <div class="icon">⚠️</div>
+                <span class="stat-trend down">-15%</span>
+              </div>
+              <div class="stat-value">23</div>
+              <div class="stat-label">待处理问题</div>
+              <div class="stat-click-hint">点击查看详情 →</div>
+            </div>
+          </div>
+
+          <!-- 图表 -->
+          <div class="charts-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>打卡趋势</h3>
+                <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px;">
+                  <option>最近7天</option>
+                  <option>最近30天</option>
+                </select>
+              </div>
+              <div class="card-body">
+                <div class="chart-container" id="chart-clock">
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 60%;"></div>
+                    <span class="chart-bar-label">周一</span>
+                  </div>
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 80%;"></div>
+                    <span class="chart-bar-label">周二</span>
+                  </div>
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 45%;"></div>
+                    <span class="chart-bar-label">周三</span>
+                  </div>
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 90%;"></div>
+                    <span class="chart-bar-label">周四</span>
+                  </div>
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 75%;"></div>
+                    <span class="chart-bar-label">周五</span>
+                  </div>
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 50%;"></div>
+                    <span class="chart-bar-label">周六</span>
+                  </div>
+                  <div class="chart-bar">
+                    <div class="chart-bar-fill" style="height: 30%;"></div>
+                    <span class="chart-bar-label">周日</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>用户分布</h3>
+              </div>
+              <div class="card-body">
+                <div class="pie-chart">
+                  <div class="pie-legend">
+                    <div class="legend-item">
+                      <div class="legend-color" style="background: var(--primary);"></div>
+                      <span class="label">巡查员</span>
+                      <span class="value">856</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-color" style="background: var(--success);"></div>
+                      <span class="label">群众</span>
+                      <span class="value">378</span>
+                    </div>
+                    <div class="legend-item">
+                      <div class="legend-color" style="background: var(--warning);"></div>
+                      <span class="label">管理员</span>
+                      <span class="value">12</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 今日打卡记录 -->
+          <div class="card">
+            <div class="card-header">
+              <h3>今日打卡记录</h3>
+              <button class="btn btn-secondary btn-sm" onclick="switchPage('clock')">查看全部</button>
+            </div>
+            <div class="card-body">
+              <div id="today-clock-list">
+                <div class="clock-record">
+                  <div class="clock-avatar">张</div>
+                  <div class="clock-info">
+                    <h4>张明</h4>
+                    <p>工业园区A区北门</p>
+                    <p style="font-size: 10px; color: var(--text-muted); font-family: monospace;">30.5723, 114.2850</p>
+                  </div>
+                  <div class="clock-time">
+                    <div class="time">08:32:15</div>
+                    <div class="status">✓ 已打卡</div>
+                  </div>
+                </div>
+                <div class="clock-record">
+                  <div class="clock-avatar">李</div>
+                  <div class="clock-info">
+                    <h4>李华</h4>
+                    <p>工业园区B区南门</p>
+                    <p style="font-size: 10px; color: var(--text-muted); font-family: monospace;">30.5730, 114.2860</p>
+                  </div>
+                  <div class="clock-time">
+                    <div class="time">08:45:22</div>
+                    <div class="status">✓ 已打卡</div>
+                  </div>
+                </div>
+                <div class="clock-record">
+                  <div class="clock-avatar">王</div>
+                  <div class="clock-info">
+                    <h4>王芳</h4>
+                    <p>生态公园东门</p>
+                    <p style="font-size: 10px; color: var(--text-muted); font-family: monospace;">30.5750, 114.2900</p>
+                  </div>
+                  <div class="clock-time">
+                    <div class="time">09:12:08</div>
+                    <div class="status">✓ 已打卡</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 定位打卡页面 -->
+        <div id="page-clock" class="page">
+          <div class="charts-grid">
+            <div class="card">
+              <div class="card-header">
+                <h3>实时打卡地图</h3>
+                <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px;">
+                  <option>全部区域</option>
+                  <option>工业园区A区</option>
+                  <option>工业园区B区</option>
+                  <option>生态公园</option>
+                </select>
+              </div>
+              <div class="card-body">
+                <div class="map-container">
+                  <div class="map-placeholder">
+                    <div class="icon">🗺️</div>
+                    <p>地图加载中...</p>
+                    <p style="font-size: 12px; margin-top: 8px;">(集成高德/百度地图API)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3>今日打卡统计</h3>
+                <select id="clock-stat-filter" onchange="filterClockStats()" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 6px 12px; border-radius: 6px;">
+                  <option value="all">全部</option>
+                  <option value="done">已打卡</option>
+                  <option value="undone">未打卡</option>
+                </select>
+              </div>
+              <div class="card-body">
+                <div class="stats-grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                  <div onclick="showClockList('all')" style="background: var(--bg-dark); padding: 16px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 28px; font-weight: 700; color: var(--primary);">168</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">总人数</div>
+                  </div>
+                  <div onclick="showClockList('done')" style="background: var(--bg-dark); padding: 16px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 28px; font-weight: 700; color: var(--success);">156</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">已打卡</div>
+                  </div>
+                  <div onclick="showClockList('undone')" style="background: var(--bg-dark); padding: 16px; border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.2s;">
+                    <div style="font-size: 28px; font-weight: 700; color: var(--warning);">12</div>
+                    <div style="font-size: 12px; color: var(--text-muted);">未打卡</div>
+                  </div>
+                </div>
+                <div style="margin-top: 16px;">
+                  <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">打卡率</div>
+                  <div style="background: var(--bg-dark); height: 8px; border-radius: 4px; overflow: hidden;">
+                    <div style="background: linear-gradient(90deg, var(--success) 0%, var(--success) 93%, var(--warning) 93%, var(--warning) 100%); height: 100%;"></div>
+                  </div>
+                  <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px; display: flex; justify-content: space-between;">
+                    <span style="color: var(--success);">● 已打卡 93%</span>
+                    <span style="color: var(--warning);">● 未打卡 7%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <h3>打卡记录列表</h3>
+              <div style="display: flex; gap: 12px;">
+                <select id="clock-status-filter" onchange="filterClock()" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                  <option>全部状态</option>
+                  <option>正常</option>
+                  <option>异常</option>
+                </select>
+                <input type="date" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                <button class="btn btn-secondary btn-sm">导出</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>用户</th>
+                    <th>打卡地址</th>
+                    <th>经纬度 (纬度, 经度)</th>
+                    <th>打卡时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 32px; height: 32px; font-size: 12px;">张</div><span>张明</span></div></td>
+                    <td>工业园区A区北门</td>
+                    <td style="font-size: 11px; color: var(--text-muted); font-family: monospace;">30.5723, 114.2850</td>
+                    <td>2026-05-10 08:32:15</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('clock', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 32px; height: 32px; font-size: 12px;">李</div><span>李华</span></div></td>
+                    <td>工业园区B区南门</td>
+                    <td style="font-size: 11px; color: var(--text-muted); font-family: monospace;">30.5730, 114.2860</td>
+                    <td>2026-05-10 08:45:22</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('clock', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 32px; height: 32px; font-size: 12px;">王</div><span>王芳</span></div></td>
+                    <td>生态公园东门</td>
+                    <td style="font-size: 11px; color: var(--text-muted); font-family: monospace;">30.5750, 114.2900</td>
+                    <td>2026-05-10 09:12:08</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('clock', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 32px; height: 32px; font-size: 12px;">赵</div><span>赵伟</span></div></td>
+                    <td>工业园区C区</td>
+                    <td style="font-size: 11px; color: var(--text-muted); font-family: monospace;">30.5710, 114.2870</td>
+                    <td>2026-05-10 09:30:45</td>
+                    <td><span class="status-badge warning">异常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('clock', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 32px; height: 32px; font-size: 12px;">周</div><span>周杰</span></div></td>
+                    <td>生态公园西门</td>
+                    <td style="font-size: 11px; color: var(--text-muted); font-family: monospace;">30.5760, 114.2910</td>
+                    <td>2026-05-10 09:45:12</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('clock', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 32px; height: 32px; font-size: 12px;">吴</div><span>吴涛</span></div></td>
+                    <td>工业园区A区东门</td>
+                    <td style="font-size: 11px; color: var(--text-muted); font-family: monospace;">30.5728, 114.2855</td>
+                    <td>2026-05-10 10:05:33</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('clock', this)">👁️</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <div class="pagination-info">显示 1-6 条，共 156 条</div>
+              <div class="pagination-btns">
+                <button class="page-btn">‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">...</button>
+                <button class="page-btn">26</button>
+                <button class="page-btn">›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 巡查记录页面 -->
+        <div id="page-records" class="page">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">📋</div>
+              </div>
+              <div class="stat-value">892</div>
+              <div class="stat-label">总记录数</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">✅</div>
+              </div>
+              <div class="stat-value">756</div>
+              <div class="stat-label">已完成</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">🔄</div>
+              </div>
+              <div class="stat-value">98</div>
+              <div class="stat-label">进行中</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">⚠️</div>
+              </div>
+              <div class="stat-value">38</div>
+              <div class="stat-label">待处理</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>巡查记录列表</h3>
+              <div style="display: flex; gap: 12px;">
+                <select id="record-status-filter" onchange="filterRecords()" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                  <option>全部状态</option>
+                  <option>已完成</option>
+                  <option>进行中</option>
+                  <option>待处理</option>
+                </select>
+                <input type="date" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                <button class="btn btn-secondary btn-sm">导出</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>记录编号</th>
+                    <th>巡查日期</th>
+                    <th>点位名称</th>
+                    <th>位置</th>
+                    <th>问题</th>
+                    <th>巡查员</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>XC20260510001</td>
+                    <td>2026-05-10 08:30</td>
+                    <td>工业园区A区</td>
+                    <td>114.2850, 30.5723</td>
+                    <td><span style="color: var(--danger);">●</span> 固废倾倒/严重</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">张</div><span>张明</span></div></td>
+                    <td><span class="status-badge success" style="cursor: pointer;" onclick="showDetail('record', this)">已完成</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>XC20260510002</td>
+                    <td>2026-05-10 09:15</td>
+                    <td>工业园区B区</td>
+                    <td>114.2860, 30.5730</td>
+                    <td><span style="color: var(--success);">●</span> 无异常</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">李</div><span>李华</span></div></td>
+                    <td><span class="status-badge success" style="cursor: pointer;" onclick="showDetail('record', this)">已完成</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>XC20260509003</td>
+                    <td>2026-05-09 14:20</td>
+                    <td>生态公园东侧河道</td>
+                    <td>114.2900, 30.5750</td>
+                    <td><span style="color: var(--warning);">●</span> 水质异常/中等</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">王</div><span>王芳</span></div></td>
+                    <td><span class="status-badge info" style="cursor: pointer;" onclick="showDetail('record', this)">处理中</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>XC20260508005</td>
+                    <td>2026-05-08 10:30</td>
+                    <td>工业园区C区</td>
+                    <td>114.2870, 30.5710</td>
+                    <td><span style="color: var(--warning);">●</span> 噪音污染/中等</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">赵</div><span>赵伟</span></div></td>
+                    <td><span class="status-badge warning" style="cursor: pointer;" onclick="showDetail('record', this)">待处理</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>XC20260507002</td>
+                    <td>2026-05-07 16:45</td>
+                    <td>生态公园西门</td>
+                    <td>114.2910, 30.5760</td>
+                    <td><span style="color: var(--danger);">●</span> 固废倾倒/严重</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">周</div><span>周杰</span></div></td>
+                    <td><span class="status-badge info" style="cursor: pointer;" onclick="showDetail('record', this)">处理中</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>XC20260506001</td>
+                    <td>2026-05-06 09:00</td>
+                    <td>工业园区A区北门</td>
+                    <td>114.2855, 30.5728</td>
+                    <td><span style="color: var(--success);">●</span> 无异常</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">张</div><span>张明</span></div></td>
+                    <td><span class="status-badge success" style="cursor: pointer;" onclick="showDetail('record', this)">已完成</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>XC20260505008</td>
+                    <td>2026-05-05 15:30</td>
+                    <td>工业园区B区南门</td>
+                    <td>114.2865, 30.5735</td>
+                    <td><span style="color: var(--danger);">●</span> 固废倾倒/严重</td>
+                    <td><div style="display: flex; align-items: center; gap: 8px;"><div class="clock-avatar" style="width: 28px; height: 28px; font-size: 11px;">李</div><span>李华</span></div></td>
+                    <td><span class="status-badge success" style="cursor: pointer;" onclick="showDetail('record', this)">已完成</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('record', this)">👁️</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <div class="pagination-info">显示 1-7 条，共 892 条</div>
+              <div class="pagination-btns">
+                <button class="page-btn">‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">...</button>
+                <button class="page-btn">223</button>
+                <button class="page-btn">›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 用户管理页面 -->
+        <div id="page-users" class="page">
+          <div class="card" style="margin-bottom: 24px;">
+            <div class="card-header">
+              <h3>用户列表</h3>
+              <div style="display: flex; gap: 12px;">
+                <div class="search-box" style="width: 240px;">
+                  <span>🔍</span>
+                  <input type="text" placeholder="搜索用户名...">
+                </div>
+                <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                  <option>全部角色</option>
+                  <option>巡查员</option>
+                  <option>群众</option>
+                  <option>管理员</option>
+                </select>
+                <button class="btn btn-primary btn-sm" onclick="openAddUserModal()">+ 添加用户</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>用户</th>
+                    <th>角色</th>
+                    <th>手机号</th>
+                    <th>所属区域</th>
+                    <th>注册时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="user-table-body">
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">张</div><span>张明</span></div></td>
+                    <td><span class="status-badge info">巡查员</span></td>
+                    <td>138****1234</td>
+                    <td>工业园区A区</td>
+                    <td>2026-01-15</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="openEditUserModal(this)" title="编辑">✏️</button><button class="action-btn" onclick="deleteUser(this)" title="删除">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">李</div><span>李华</span></div></td>
+                    <td><span class="status-badge info">巡查员</span></td>
+                    <td>139****5678</td>
+                    <td>工业园区B区</td>
+                    <td>2026-02-20</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="openEditUserModal(this)" title="编辑">✏️</button><button class="action-btn" onclick="deleteUser(this)" title="删除">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">王</div><span>王芳</span></div></td>
+                    <td><span class="status-badge warning">群众</span></td>
+                    <td>137****9012</td>
+                    <td>生态公园</td>
+                    <td>2026-03-10</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="openEditUserModal(this)" title="编辑">✏️</button><button class="action-btn" onclick="deleteUser(this)" title="删除">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">赵</div><span>赵伟</span></div></td>
+                    <td><span class="status-badge info">巡查员</span></td>
+                    <td>136****3456</td>
+                    <td>工业园区C区</td>
+                    <td>2026-04-05</td>
+                    <td><span class="status-badge danger">禁用</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="openEditUserModal(this)" title="编辑">✏️</button><button class="action-btn" onclick="deleteUser(this)" title="删除">🗑️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">管</div><span>管理员</span></div></td>
+                    <td><span class="status-badge danger">管理员</span></td>
+                    <td>188****0000</td>
+                    <td>系统管理</td>
+                    <td>2025-12-01</td>
+                    <td><span class="status-badge success">正常</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="openEditUserModal(this)" title="编辑">✏️</button><button class="action-btn" style="opacity: 0.3; cursor: not-allowed;" title="禁止删除">🗑️</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <div class="pagination-info">显示 1-5 条，共 1,234 条</div>
+              <div class="pagination-btns">
+                <button class="page-btn">‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">...</button>
+                <button class="page-btn">247</button>
+                <button class="page-btn">›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 消息中心页面 -->
+        <div id="page-notifications" class="page">
+          <div class="card">
+            <div class="card-header">
+              <h3>消息列表</h3>
+              <div style="display: flex; gap: 12px;">
+                <button class="btn btn-secondary btn-sm" onclick="markAllRead()">全部标为已读</button>
+              </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+              <div id="notification-list">
+                <div class="notification-item unread" onclick="showNotificationDetail(this, 1)">
+                  <div class="notification-icon danger">⚠️</div>
+                  <div class="notification-content">
+                    <div class="notification-title">待处理问题提醒</div>
+                    <div class="notification-desc">有 5 条新问题待处理，请及时处理</div>
+                    <div class="notification-time">10分钟前</div>
+                  </div>
+                  <div class="notification-badge">5</div>
+                </div>
+                <div class="notification-item unread" onclick="showNotificationDetail(this, 2)">
+                  <div class="notification-icon warning">📍</div>
+                  <div class="notification-content">
+                    <div class="notification-title">打卡异常提醒</div>
+                    <div class="notification-desc">赵伟 在 工业园区C区 打卡位置异常</div>
+                    <div class="notification-time">30分钟前</div>
+                  </div>
+                </div>
+                <div class="notification-item unread" onclick="showNotificationDetail(this, 3)">
+                  <div class="notification-icon info">👥</div>
+                  <div class="notification-content">
+                    <div class="notification-title">新用户注册</div>
+                    <div class="notification-desc">新用户 "陈思" 申请注册，等待审核</div>
+                    <div class="notification-time">1小时前</div>
+                  </div>
+                </div>
+                <div class="notification-item" onclick="showNotificationDetail(this, 4)">
+                  <div class="notification-icon success">✅</div>
+                  <div class="notification-content">
+                    <div class="notification-title">问题已解决</div>
+                    <div class="notification-desc">固废倾倒问题 (WT20260507005) 已标记为已解决</div>
+                    <div class="notification-time">昨天</div>
+                  </div>
+                </div>
+                <div class="notification-item" onclick="showNotificationDetail(this, 5)">
+                  <div class="notification-icon">📊</div>
+                  <div class="notification-content">
+                    <div class="notification-title">日报生成</div>
+                    <div class="notification-desc">2026-05-09 巡查日报已生成</div>
+                    <div class="notification-time">昨天</div>
+                  </div>
+                </div>
+                <div class="notification-item" onclick="showNotificationDetail(this, 6)">
+                  <div class="notification-icon">🔄</div>
+                  <div class="notification-content">
+                    <div class="notification-title">系统更新</div>
+                    <div class="notification-desc">环境巡查系统将于本周日进行版本更新</div>
+                    <div class="notification-time">3天前</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 系统设置页面 -->
+        <div id="page-settings" class="page">
+          <div class="card" style="max-width: 800px;">
+            <div class="card-body">
+              <div class="settings-section">
+                <div class="settings-section-title">基本设置</div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>系统名称</h4>
+                    <p>显示在系统各处的名称</p>
+                  </div>
+                  <input type="text" value="环境巡查系统" style="width: 200px; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>联系电话</h4>
+                    <p>用户可见的客服电话</p>
+                  </div>
+                  <input type="text" value="400-888-8888" style="width: 200px; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                </div>
+              </div>
+
+              <div class="settings-section">
+                <div class="settings-section-title">打卡设置</div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>允许迟到时间</h4>
+                    <p>超过此时间打卡将被标记为迟到</p>
+                  </div>
+                  <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                    <option>15分钟</option>
+                    <option>30分钟</option>
+                    <option>60分钟</option>
+                  </select>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>GPS精度要求</h4>
+                    <p>低于此精度的打卡将被视为异常</p>
+                  </div>
+                  <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                    <option>10米</option>
+                    <option selected>50米</option>
+                    <option>100米</option>
+                  </select>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>强制GPS打卡</h4>
+                    <p>启用后必须获取GPS才能打卡</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-section">
+                <div class="settings-section-title">巡查设置</div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>最低巡查时长</h4>
+                    <p>每次巡查至少需要的最短时间</p>
+                  </div>
+                  <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                    <option>30分钟</option>
+                    <option selected>1小时</option>
+                    <option>2小时</option>
+                  </select>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>巡查点数量要求</h4>
+                    <p>每次巡查必须到达的最少巡查点</p>
+                  </div>
+                  <select style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                    <option>3个</option>
+                    <option selected>5个</option>
+                    <option>10个</option>
+                  </select>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>自动派发任务</h4>
+                    <p>根据区域自动分配巡查任务</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="settings-section">
+                <div class="settings-section-title">通知设置</div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>新用户注册审核</h4>
+                    <p>新注册用户需要管理员审核</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>异常打卡通知</h4>
+                    <p>发现异常打卡时发送通知</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="setting-item">
+                  <div class="setting-info">
+                    <h4>日报发送</h4>
+                    <p>每日自动发送巡查日报</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="margin-top: 32px; display: flex; gap: 12px; justify-content: flex-end;">
+                <button class="btn btn-secondary">重置</button>
+                <button class="btn btn-primary" onclick="showToast('设置已保存', 'success')">保存设置</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 待处理问题页面 -->
+        <div id="page-problems" class="page">
+          <div class="stats-grid" style="margin-bottom: 24px;">
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">⚠️</div>
+              </div>
+              <div class="stat-value">23</div>
+              <div class="stat-label">待处理问题</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">🔄</div>
+              </div>
+              <div class="stat-value">15</div>
+              <div class="stat-label">处理中</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">✅</div>
+              </div>
+              <div class="stat-value">156</div>
+              <div class="stat-label">已解决</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header">
+                <div class="icon">📊</div>
+              </div>
+              <div class="stat-value">87%</div>
+              <div class="stat-label">解决率</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>问题上报表</h3>
+              <div style="display: flex; gap: 12px;">
+                <select id="problem-type-filter" onchange="filterProblems()" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                  <option>全部类型</option>
+                  <option>固废倾倒</option>
+                  <option>水质异常</option>
+                  <option>噪音污染</option>
+                  <option>空气污染</option>
+                </select>
+                <select id="problem-status-filter" onchange="filterProblems()" style="background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+                  <option>全部状态</option>
+                  <option>待处理</option>
+                  <option>处理中</option>
+                  <option>已解决</option>
+                </select>
+                <button class="btn btn-secondary btn-sm">导出</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>问题编号</th>
+                    <th>水库/点位</th>
+                    <th>位置坐标</th>
+                    <th>问题描述</th>
+                    <th>严重性</th>
+                    <th>上报人</th>
+                    <th>上报时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>WT20260510001</td>
+                    <td>工业园区B区</td>
+                    <td style="font-size: 11px; color: var(--text-muted);">114.2855, 30.5728</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="园区B区北门发现大量建筑垃圾，影响环境">园区B区北门发现大量建筑垃圾</td>
+                    <td><span style="background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">严重</span></td>
+                    <td><div style="display: flex; align-items: center; gap: 6px;"><div class="clock-avatar" style="width: 24px; height: 24px; font-size: 10px;">王</div><span style="font-size: 12px;">王芳</span></div></td>
+                    <td style="font-size: 12px;">2026-05-10 09:15</td>
+                    <td><span class="status-badge warning" style="cursor: pointer;" onclick="showDetail('problem', this)">待处理</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('problem', this)">👁️</button><button class="action-btn" onclick="markProblemDone(this)">✓</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>WT20260510002</td>
+                    <td>生态公园东侧河道</td>
+                    <td style="font-size: 11px; color: var(--text-muted);">114.2900, 30.5750</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="河道水体呈浑浊黄色，需检测">河道水体呈浑浊黄色</td>
+                    <td><span style="background: rgba(245, 158, 11, 0.2); color: var(--warning); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">中等</span></td>
+                    <td><div style="display: flex; align-items: center; gap: 6px;"><div class="clock-avatar" style="width: 24px; height: 24px; font-size: 10px;">李</div><span style="font-size: 12px;">李华</span></div></td>
+                    <td style="font-size: 12px;">2026-05-10 08:30</td>
+                    <td><span class="status-badge info" style="cursor: pointer;" onclick="showDetail('problem', this)">处理中</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('problem', this)">👁️</button><button class="action-btn" onclick="markProblemDone(this)">✓</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>WT20260509001</td>
+                    <td>工业园区A区</td>
+                    <td style="font-size: 11px; color: var(--text-muted);">114.2850, 30.5723</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="夜间施工噪音严重扰民">夜间施工噪音严重扰民</td>
+                    <td><span style="background: rgba(245, 158, 11, 0.2); color: var(--warning); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">中等</span></td>
+                    <td><div style="display: flex; align-items: center; gap: 6px;"><div class="clock-avatar" style="width: 24px; height: 24px; font-size: 10px;">张</div><span style="font-size: 12px;">张明</span></div></td>
+                    <td style="font-size: 12px;">2026-05-09 22:15</td>
+                    <td><span class="status-badge info" style="cursor: pointer;" onclick="showDetail('problem', this)">处理中</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('problem', this)">👁️</button><button class="action-btn" onclick="markProblemDone(this)">✓</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>WT20260508003</td>
+                    <td>工业园区C区</td>
+                    <td style="font-size: 11px; color: var(--text-muted);">114.2870, 30.5710</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="化工厂排放异常，有刺鼻气味">化工厂排放异常，有刺鼻气味</td>
+                    <td><span style="background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">严重</span></td>
+                    <td><div style="display: flex; align-items: center; gap: 6px;"><div class="clock-avatar" style="width: 24px; height: 24px; font-size: 10px;">赵</div><span style="font-size: 12px;">赵伟</span></div></td>
+                    <td style="font-size: 12px;">2026-05-08 14:20</td>
+                    <td><span class="status-badge warning" style="cursor: pointer;" onclick="showDetail('problem', this)">待处理</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('problem', this)">👁️</button><button class="action-btn" onclick="markProblemDone(this)">✓</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>WT20260507005</td>
+                    <td>生态公园西门</td>
+                    <td style="font-size: 11px; color: var(--text-muted);">114.2910, 30.5760</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="路边发现废弃化学品容器">路边发现废弃化学品容器</td>
+                    <td><span style="background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">严重</span></td>
+                    <td><div style="display: flex; align-items: center; gap: 6px;"><div class="clock-avatar" style="width: 24px; height: 24px; font-size: 10px;">周</div><span style="font-size: 12px;">周杰</span></div></td>
+                    <td style="font-size: 12px;">2026-05-07 16:45</td>
+                    <td><span class="status-badge success" style="cursor: pointer;" onclick="showDetail('problem', this)">已解决</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('problem', this)">👁️</button></div></td>
+                  </tr>
+                  <tr>
+                    <td>WT20260506002</td>
+                    <td>工业园区B区南门</td>
+                    <td style="font-size: 11px; color: var(--text-muted);">114.2865, 30.5735</td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="下水道堵塞，污水外溢">下水道堵塞，污水外溢</td>
+                    <td><span style="background: rgba(245, 158, 11, 0.2); color: var(--warning); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">中等</span></td>
+                    <td><div style="display: flex; align-items: center; gap: 6px;"><div class="clock-avatar" style="width: 24px; height: 24px; font-size: 10px;">王</div><span style="font-size: 12px;">王芳</span></div></td>
+                    <td style="font-size: 12px;">2026-05-06 11:30</td>
+                    <td><span class="status-badge success" style="cursor: pointer;" onclick="showDetail('problem', this)">已解决</span></td>
+                    <td><div class="action-btns"><button class="action-btn" onclick="showDetail('problem', this)">👁️</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              <div class="pagination-info">显示 1-6 条，共 23 条</div>
+              <div class="pagination-btns">
+                <button class="page-btn">‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn">...</button>
+                <button class="page-btn">6</button>
+                <button class="page-btn">›</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 系统设置页面 -->
+  <div class="modal-overlay" id="user-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="user-modal-title">添加用户</h3>
+        <button class="modal-close" onclick="closeModal('user-modal')">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="user-form">
+          <input type="hidden" id="edit-user-id">
+          <div class="form-group">
+            <label>用户名</label>
+            <input type="text" id="edit-username" placeholder="请输入用户名">
+          </div>
+          <div class="form-group">
+            <label>手机号</label>
+            <input type="tel" id="edit-phone" placeholder="请输入手机号">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>角色</label>
+              <select id="edit-role">
+                <option value="巡查员">巡查员</option>
+                <option value="群众">群众</option>
+                <option value="管理员">管理员</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>所属区域</label>
+              <select id="edit-area">
+                <option value="工业园区A区">工业园区A区</option>
+                <option value="工业园区B区">工业园区B区</option>
+                <option value="工业园区C区">工业园区C区</option>
+                <option value="生态公园">生态公园</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" id="password-group">
+            <label>密码</label>
+            <input type="password" id="edit-password" placeholder="请输入密码">
+          </div>
+          <div class="form-group">
+            <label>状态</label>
+            <select id="edit-status">
+              <option value="正常">正常</option>
+              <option value="禁用">禁用</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('user-modal')">取消</button>
+        <button class="btn btn-primary" id="user-save-btn" onclick="saveUser()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 详情查看模态框 -->
+  <div class="modal-overlay" id="detail-modal">
+    <div class="modal" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 id="detail-modal-title">详情</h3>
+        <button class="modal-close" onclick="closeModal('detail-modal')">×</button>
+      </div>
+      <div class="modal-body" id="detail-modal-content">
+        <!-- 动态内容 -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('detail-modal')">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <span id="toast-icon">✓</span>
+    <span id="toast-message">保存成功</span>
+  </div>
+
+  <script>
+    // 等待 DOM 加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+    
+    // 登录表单提交
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username && password) {
+        document.getElementById('login-page').style.display = 'none';
+        document.getElementById('main-app').style.display = 'flex';
+        document.getElementById('admin-name').textContent = username;
+        showToast('登录成功', 'success');
+      }
+    });
+
+    // 退出登录
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      document.getElementById('main-app').style.display = 'none';
+      document.getElementById('login-page').style.display = 'flex';
+      showToast('已退出登录', 'success');
+    });
+
+    // 导航切换
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+      item.addEventListener('click', function() {
+        const page = this.getAttribute('data-page');
+        if (page) {
+          switchPage(page);
+        }
+      });
+    });
+
+    // 添加用户模态框
+    document.getElementById('add-user-btn').addEventListener('click', function() {
+      document.getElementById('user-modal').classList.add('show');
+    });
+
+    // 点击模态框外部关闭
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          overlay.classList.remove('show');
+        }
+      });
+    });
+
+    // 分页按钮点击事件
+    document.querySelectorAll('.page-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const parent = this.closest('.pagination-btns');
+        if (parent) {
+          parent.querySelectorAll('.page-btn').forEach(function(b) {
+            b.classList.remove('active');
+          });
+          this.classList.add('active');
+          showToast('已跳转到第 ' + this.textContent + ' 页', 'success');
+        }
+      });
+    });
+
+    // 编辑用户按钮点击事件
+    document.querySelectorAll('.action-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        const icon = this.textContent.trim();
+        if (icon === '✏️') {
+          openEditUserModal(this);
+        } else if (icon === '🗑️' && !this.style.opacity) {
+          if (confirm('确定要删除该用户吗？')) {
+            deleteUser(this);
+          }
+        } else if (icon === '👁️') {
+          const row = this.closest('tr');
+          const page = this.closest('.page')?.id || '';
+          if (page.includes('clock')) {
+            showDetail('clock', this);
+          } else if (page.includes('problems')) {
+            showDetail('problem', this);
+          } else if (page.includes('records')) {
+            showDetail('record', this);
+          }
+        }
+        e.stopPropagation();
+      });
+    });
+
+    // 巡查记录操作按钮
+    document.querySelectorAll('#page-records .action-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        const icon = this.textContent.trim();
+        if (icon === '👁️') {
+          showDetail('record', this);
+        } else if (icon === '✏️') {
+          showToast('编辑记录', 'success');
+        }
+        e.stopPropagation();
+      });
+    });
+
+    // 打卡记录操作按钮
+    document.querySelectorAll('#page-clock .action-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        const icon = this.textContent.trim();
+        if (icon === '👁️') {
+          showDetail('clock', this);
+        } else if (icon === '📍') {
+          showToast('查看打卡位置', 'success');
+        }
+        e.stopPropagation();
+      });
+    });
+
+    // 问题列表操作按钮
+    document.querySelectorAll('#page-problems .action-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        const icon = this.textContent.trim();
+        if (icon === '👁️') {
+          showDetail('problem', this);
+        } else if (icon === '📍') {
+          showToast('查看问题位置', 'success');
+        } else if (icon === '✓') {
+          markProblemDone(this);
+        }
+        e.stopPropagation();
+      });
+    });
+
+    // 模拟数据更新
+    function updateClockData() {
+      const todayList = document.getElementById('today-clock-list');
+      const times = ['08:25:10', '08:38:45', '08:52:30', '09:05:15'];
+      const names = ['周', '吴', '郑', '陈'];
+      const areas = ['工业园区A区', '工业园区B区', '生态公园', '工业园区C区'];
+
+      const randomTime = times[Math.floor(Math.random() * times.length)];
+      const randomName = names[Math.floor(Math.random() * names.length)];
+      const randomArea = areas[Math.floor(Math.random() * areas.length)];
+
+      const newRecord = document.createElement('div');
+      newRecord.className = 'clock-record';
+      newRecord.innerHTML = `
+        <div class="clock-avatar">${randomName}</div>
+        <div class="clock-info">
+          <h4>${randomName}${['明', '华', '芳', '伟'][Math.floor(Math.random() * 4)]}</h4>
+          <p>${randomArea} · 正常</p>
+        </div>
+        <div class="clock-time">
+          <div class="time">${randomTime}</div>
+          <div class="status">✓ 已打卡</div>
+        </div>
+      `;
+      todayList.insertBefore(newRecord, todayList.firstChild);
+
+      if (todayList.children.length > 5) {
+        todayList.removeChild(todayList.lastChild);
+      }
+    }
+
+    // 每30秒更新一次数据
+    // setInterval(updateClockData, 30000);
+
+    }); // 结束 DOMContentLoaded
+
+    // 全局函数 - 可被 onclick 调用
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+
+    // 删除用户
+    function deleteUser(btn) {
+      const row = btn.closest('tr');
+      const name = row.querySelector('td:first-child span')?.textContent || '该用户';
+      if (confirm('确定要删除用户 "' + name + '" 吗？')) {
+        row.style.display = 'none';
+        showToast('用户 "' + name + '" 已删除', 'success');
+      }
+    }
+
+    // 标记问题已处理
+    function markProblemDone(btn) {
+      const row = btn.closest('tr');
+      const statusCell = row.querySelector('td:nth-child(7) span');
+      if (statusCell) {
+        statusCell.className = 'status-badge success';
+        statusCell.textContent = '已解决';
+      }
+      btn.remove();
+      showToast('问题已标记为已处理', 'success');
+    }
+
+    // 全部标为已读
+    function markAllRead() {
+      document.querySelectorAll('.notification-item.unread').forEach(function(item) {
+        item.classList.remove('unread');
+      });
+      document.querySelector('.topbar-btn .count')?.remove();
+      showToast('所有消息已标为已读', 'success');
+    }
+
+    // 显示消息详情
+    function showNotificationDetail(item, id) {
+      item.classList.remove('unread');
+      const title = item.querySelector('.notification-title').textContent;
+      const desc = item.querySelector('.notification-desc').textContent;
+      const time = item.querySelector('.notification-time').textContent;
+
+      document.getElementById('detail-modal-title').textContent = title;
+      document.getElementById('detail-modal-content').innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-label">消息类型</div>
+          <div class="detail-value">${title}</div>
+          <div class="detail-label">消息内容</div>
+          <div class="detail-value">${desc}</div>
+          <div class="detail-label">接收时间</div>
+          <div class="detail-value">${time}</div>
+        </div>
+      `;
+      document.getElementById('detail-modal').classList.add('show');
+    }
+
+    // 筛选问题列表
+    function filterProblems() {
+      const typeFilter = document.getElementById('problem-type-filter')?.value || '全部类型';
+      const statusFilter = document.getElementById('problem-status-filter')?.value || '全部状态';
+      const rows = document.querySelectorAll('#page-problems tbody tr');
+
+      rows.forEach(function(row) {
+        let show = true;
+        const cells = row.querySelectorAll('td');
+        const type = cells[1].textContent.trim();
+        const status = cells[6].querySelector('span')?.textContent || '';
+
+        if (typeFilter !== '全部类型' && type !== typeFilter) {
+          show = false;
+        }
+        if (statusFilter !== '全部状态' && status !== statusFilter) {
+          show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+      });
+
+      // 更新显示数量
+      const visibleRows = Array.from(rows).filter(r => r.style.display !== 'none');
+      const infoEl = document.querySelector('#page-problems .pagination-info');
+      if (infoEl) {
+        infoEl.textContent = `显示 1-${visibleRows.length} 条，共 ${visibleRows.length} 条`;
+      }
+    }
+
+    // 筛选巡查记录
+    function filterRecords() {
+      const statusFilter = document.getElementById('record-status-filter')?.value || '全部状态';
+      const rows = document.querySelectorAll('#page-records tbody tr');
+
+      rows.forEach(function(row) {
+        let show = true;
+        const status = row.querySelector('td:nth-child(6) span')?.textContent || '';
+
+        if (statusFilter !== '全部状态' && status !== statusFilter) {
+          show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+      });
+    }
+
+    // 筛选打卡记录
+    function filterClock() {
+      const statusFilter = document.getElementById('clock-status-filter')?.value || '全部状态';
+      const rows = document.querySelectorAll('#page-clock tbody tr');
+
+      rows.forEach(function(row) {
+        let show = true;
+        const status = row.querySelector('td:nth-child(5) span')?.textContent || '';
+
+        if (statusFilter !== '全部状态' && status !== statusFilter) {
+          show = false;
+        }
+
+        row.style.display = show ? '' : 'none';
+      });
+    }
+
+    // 打卡统计筛选
+    function filterClockStats() {
+      const filter = document.getElementById('clock-stat-filter')?.value || 'all';
+      showClockList(filter);
+    }
+
+    // 显示打卡列表（已打卡/未打卡/全部）
+    function showClockList(type) {
+      // 更新下拉框
+      const select = document.getElementById('clock-stat-filter');
+      if (select) select.value = type;
+
+      // 更新打卡记录表格显示
+      const rows = document.querySelectorAll('#page-clock tbody tr');
+      const clockStatusFilter = document.getElementById('clock-status-filter');
+
+      if (type === 'done') {
+        if (clockStatusFilter) clockStatusFilter.value = '正常';
+      } else if (type === 'undone') {
+        if (clockStatusFilter) clockStatusFilter.value = '异常';
+      } else {
+        if (clockStatusFilter) clockStatusFilter.value = '全部状态';
+      }
+
+      filterClock();
+      showToast('已筛选：' + (type === 'done' ? '已打卡人员' : (type === 'undone' ? '未打卡人员' : '全部人员')), 'success');
+    }
+
+    // 打开添加用户模态框
+    function openAddUserModal() {
+      document.getElementById('user-modal-title').textContent = '添加用户';
+      document.getElementById('edit-user-id').value = '';
+      document.getElementById('edit-username').value = '';
+      document.getElementById('edit-phone').value = '';
+      document.getElementById('edit-role').value = '巡查员';
+      document.getElementById('edit-area').value = '工业园区A区';
+      document.getElementById('edit-password').value = '';
+      document.getElementById('edit-password').placeholder = '请输入密码';
+      document.getElementById('password-group').style.display = 'block';
+      document.getElementById('edit-status').value = '正常';
+      document.getElementById('user-save-btn').textContent = '添加';
+      document.getElementById('user-modal').classList.add('show');
+    }
+
+    // 打开编辑用户模态框
+    function openEditUserModal(btn) {
+      const row = btn.closest('tr');
+      const cells = row.querySelectorAll('td');
+
+      document.getElementById('user-modal-title').textContent = '编辑用户';
+      document.getElementById('edit-user-id').value = cells[0].querySelector('span')?.dataset.id || '';
+      document.getElementById('edit-username').value = cells[0].querySelector('span')?.textContent || cells[0].textContent.trim();
+      document.getElementById('edit-phone').value = cells[2].textContent.trim();
+      document.getElementById('edit-role').value = cells[1].querySelector('span')?.textContent || '巡查员';
+      document.getElementById('edit-area').value = cells[3].textContent.trim();
+      document.getElementById('edit-password').value = '';
+      document.getElementById('edit-password').placeholder = '不修改请留空';
+      document.getElementById('password-group').style.display = 'none';
+      document.getElementById('edit-status').value = cells[5].querySelector('span')?.classList.contains('danger') ? '禁用' : '正常';
+      document.getElementById('user-save-btn').textContent = '保存';
+      document.getElementById('user-modal').classList.add('show');
+    }
+
+    // 保存用户（添加或编辑）
+    function saveUser() {
+      const id = document.getElementById('edit-user-id').value;
+      const username = document.getElementById('edit-username').value.trim();
+      const phone = document.getElementById('edit-phone').value.trim();
+      const role = document.getElementById('edit-role').value;
+      const area = document.getElementById('edit-area').value;
+      const status = document.getElementById('edit-status').value;
+      const password = document.getElementById('edit-password').value;
+
+      if (!username) {
+        showToast('请输入用户名', 'error');
+        return;
+      }
+
+      if (!id) {
+        // 添加新用户 - 在表格末尾添加一行
+        const tbody = document.getElementById('user-table-body');
+        const today = new Date().toISOString().split('T')[0];
+        const firstChar = username.charAt(0);
+        const roleClass = role === '管理员' ? 'danger' : (role === '群众' ? 'warning' : 'info');
+        const statusClass = status === '禁用' ? 'danger' : 'success';
+
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+          <td><div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">${firstChar}</div><span>${username}</span></div></td>
+          <td><span class="status-badge ${roleClass}">${role}</span></td>
+          <td>${phone}</td>
+          <td>${area}</td>
+          <td>${today}</td>
+          <td><span class="status-badge ${statusClass}">${status}</span></td>
+          <td><div class="action-btns"><button class="action-btn" onclick="openEditUserModal(this)" title="编辑">✏️</button><button class="action-btn" onclick="deleteUser(this)" title="删除">🗑️</button></div></td>
+        `;
+        tbody.appendChild(newRow);
+        showToast('用户 "' + username + '" 添加成功', 'success');
+      } else {
+        // 编辑已有用户 - 更新该行
+        const tbody = document.getElementById('user-table-body');
+        const rows = tbody.querySelectorAll('tr');
+        for (let i = 0; i < rows.length; i++) {
+          const cells = rows[i].querySelectorAll('td');
+          const cellName = cells[0].querySelector('span')?.textContent || '';
+          if (cellName === username || cells[0].textContent.trim() === username) {
+            const roleClass = role === '管理员' ? 'danger' : (role === '群众' ? 'warning' : 'info');
+            const statusClass = status === '禁用' ? 'danger' : 'success';
+
+            cells[0].innerHTML = `<div style="display: flex; align-items: center; gap: 12px;"><div class="clock-avatar" style="width: 36px; height: 36px; font-size: 14px;">${username.charAt(0)}</div><span>${username}</span></div>`;
+            cells[1].innerHTML = `<span class="status-badge ${roleClass}">${role}</span>`;
+            cells[2].textContent = phone;
+            cells[3].textContent = area;
+            cells[5].innerHTML = `<span class="status-badge ${statusClass}">${status}</span>`;
+            break;
+          }
+        }
+        showToast('用户 "' + username + '" 信息已更新', 'success');
+      }
+
+      closeModal('user-modal');
+    }
+
+    // 查看详情
+    function showDetail(type, btn) {
+      let title = '';
+      let content = '';
+      const row = btn.closest('tr');
+      const cells = row.querySelectorAll('td');
+
+      if (type === 'user') {
+        title = '用户详情';
+        const name = cells[0].querySelector('span')?.textContent || cells[0].textContent.trim();
+        const role = cells[1].querySelector('span')?.textContent || '';
+        const phone = cells[2].textContent.trim();
+        const area = cells[3].textContent.trim();
+        const time = cells[4].textContent.trim();
+        const status = cells[5].querySelector('span')?.textContent || '';
+        content = `
+          <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+            <div style="font-weight: 600; color: var(--text-secondary);">用户名</div>
+            <div>${name}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">角色</div>
+            <div>${role}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">手机号</div>
+            <div>${phone}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">所属区域</div>
+            <div>${area}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">注册时间</div>
+            <div>${time}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">状态</div>
+            <div>${status}</div>
+          </div>
+        `;
+      } else if (type === 'clock') {
+        title = '定位打卡详情';
+        const name = cells[0].querySelector('span')?.textContent || cells[0].textContent.trim();
+        const address = cells[1].textContent.trim();
+        const coords = cells[2].textContent.trim();
+        const timestamp = cells[3].textContent.trim();
+        const status = cells[4].querySelector('span')?.textContent || '';
+        content = `
+          <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start;">
+            <div style="font-weight: 600; color: var(--text-secondary);">用户</div>
+            <div>${name}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">打卡地址</div>
+            <div>${address}</div>
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="font-weight: 600; margin-bottom: 12px;">📍 位置信息</div>
+            <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start;">
+              <div style="font-weight: 600; color: var(--text-secondary);">纬度 (latitude)</div>
+              <div style="font-family: monospace;">${coords.split(',')[0].trim()}</div>
+              <div style="font-weight: 600; color: var(--text-secondary);">经度 (longitude)</div>
+              <div style="font-family: monospace;">${coords.split(',')[1].trim()}</div>
+              <div style="font-weight: 600; color: var(--text-secondary);">地址 (address)</div>
+              <div>${address}</div>
+              <div style="font-weight: 600; color: var(--text-secondary);">时间戳 (timestamp)</div>
+              <div>${timestamp}</div>
+            </div>
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start;">
+              <div style="font-weight: 600; color: var(--text-secondary);">打卡状态</div>
+              <div>${cells[4].querySelector('span')?.outerHTML || status}</div>
+            </div>
+          </div>
+        `;
+      } else if (type === 'record') {
+        title = '巡查记录详情';
+        const id = cells[0].textContent.trim();
+        const date = cells[1].textContent.trim();
+        const pointName = cells[2].textContent.trim();
+        const location = cells[3].textContent.trim();
+        const issue = cells[4].textContent.trim();
+        const inspector = cells[5].querySelector('span')?.textContent || cells[5].textContent.trim();
+        const status = cells[6].querySelector('span')?.textContent || '';
+        content = `
+          <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start;">
+            <div style="font-weight: 600; color: var(--text-secondary);">记录编号</div>
+            <div>${id}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">巡查日期</div>
+            <div>${date}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">点位名称</div>
+            <div>${pointName}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">位置坐标</div>
+            <div>${location}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">存在问题</div>
+            <div>${issue}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">巡查员</div>
+            <div>${inspector}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">状态</div>
+            <div>${status}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">上报者</div>
+            <div>${inspector} (巡查员)</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">分派巡查员</div>
+            <div>${inspector}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">处理结果</div>
+            <div>${status === '已完成' ? '已处理完毕' : (status === '处理中' ? '处理中，请耐心等待' : '待处理')}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">提交时间</div>
+            <div>${date}</div>
+          </div>
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="font-weight: 600; margin-bottom: 12px;">📷 现场照片</div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <div style="width: 120px; height: 90px; background: var(--bg-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px;">暂无照片</div>
+            </div>
+          </div>
+        `;
+      } else if (type === 'problem') {
+        title = '问题上报详情';
+        const id = cells[0].textContent.trim();
+        const pointName = cells[1].textContent.trim();
+        const location = cells[2].textContent.trim();
+        const desc = cells[3].textContent.trim();
+        const severity = cells[4].querySelector('span')?.textContent || '';
+        const reporter = cells[5].querySelector('span')?.textContent || cells[5].textContent.trim();
+        const submitTime = cells[6].textContent.trim();
+        const status = cells[7].querySelector('span')?.textContent || '';
+        content = `
+          <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start;">
+            <div style="font-weight: 600; color: var(--text-secondary);">问题编号</div>
+            <div>${id}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">水库/点位</div>
+            <div>${pointName}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">位置坐标</div>
+            <div style="font-size: 13px; color: var(--text-muted);">${location}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">问题描述</div>
+            <div>${desc}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">严重性</div>
+            <div>${cells[4].querySelector('span')?.outerHTML || severity}</div>
+            <div style="font-weight: 600; color: var(--text-secondary);">备注</div>
+            <div style="color: var(--text-muted); font-style: italic;">暂无备注信息</div>
+          </div>
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="font-weight: 600; margin-bottom: 12px;">📋 上报信息</div>
+            <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start;">
+              <div style="font-weight: 600; color: var(--text-secondary);">上报人</div>
+              <div>${reporter} (巡查员)</div>
+              <div style="font-weight: 600; color: var(--text-secondary);">上报时间</div>
+              <div>${submitTime}</div>
+            </div>
+          </div>
+          <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+            <div style="font-weight: 600; margin-bottom: 12px;">📷 现场照片</div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <div style="width: 120px; height: 90px; background: var(--bg-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px; flex-direction: column;">
+                <span style="font-size: 24px;">📷</span>
+                <span>暂无照片</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('detail-modal-title').textContent = title;
+      document.getElementById('detail-modal-content').innerHTML = content;
+      document.getElementById('detail-modal').classList.add('show');
+    }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('toast');
+      const toastIcon = document.getElementById('toast-icon');
+      const toastMessage = document.getElementById('toast-message');
+      toastMessage.textContent = message;
+      toastIcon.textContent = type === 'success' ? '✓' : '✕';
+      toast.className = 'toast ' + type;
+      toast.classList.add('show');
+      setTimeout(function() {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function switchPage(page) {
+      // 更新导航
+      document.querySelectorAll('.nav-item').forEach(function(item) {
+        item.classList.remove('active');
+        if (item.getAttribute('data-page') === page) {
+          item.classList.add('active');
+        }
+      });
+
+      // 更新页面
+      document.querySelectorAll('.page').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      document.getElementById('page-' + page).classList.add('active');
+
+      // 更新标题
+      const titles = {
+        'dashboard': '工作台',
+        'clock': '定位打卡',
+        'records': '巡查记录',
+        'users': '用户管理',
+        'notifications': '消息中心',
+        'settings': '系统设置',
+        'problems': '待处理问题'
+      };
+      document.getElementById('page-title').textContent = titles[page] || '工作台';
+    }
+  </script>
+</body>
+</html>

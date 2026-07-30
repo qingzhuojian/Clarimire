@@ -1,0 +1,142 @@
+表名(英文)	接口名称(中文)	请求路径	请求方法	请求参数	返回值
+Auth(通用)	用户登录	/api/auth/login	POST	Body: { username, password }	Result<LoginResponse>
+Auth(通用)	用户注册	/api/auth/register	POST	Body: { username, password, realName, role, phone }	Result<Void>
+Auth(通用)	获取当前用户信息	/api/auth/profile	GET	Header: Authorization	Result<User>
+Auth(通用)	修改密码	/api/auth/password	PUT	Header + Body: { oldPassword, newPassword }	Result<Void>
+Auth(通用)	更新个人信息	/api/auth/profile	PUT	Header + Body: User	Result<Void>
+Auth(移动)	登录（移动）	/api/mobile/auth/login	POST	Body: { username, password }	Result<LoginResponse>
+Auth(移动)	注册（移动）	/api/mobile/auth/register	POST	Body: { username, password, realName, role, phone }	Result<Void>
+Auth(移动)	获取个人信息（移动）	/api/mobile/auth/profile	GET	Header: Authorization	Result<User>
+User(通用)	用户列表（分页）	/api/users	GET	Query: page, pageSize, username?, role?, status?	Result<PageInfo<User>>
+User(通用)	用户详情	/api/users/{id}	GET	Path: id	Result<User>
+User(通用)	创建用户	/api/users	POST	Body: User	Result<User>
+User(通用)	更新用户	/api/users/{id}	PUT	Path: id; Body: User	Result<User>
+User(通用)	删除用户	/api/users/{id}	DELETE	Path: id	Result<Void>
+User(通用)	重置密码	/api/users/{id}/reset-password	POST	Path: id	Result<Void>
+User(通用)	更新用户状态	/api/users/{id}/status	PUT	Path: id; Query: status(1/0)	Result<Void>
+User(Web)	用户列表	/api/web/users	GET	Query: page, pageSize, role?, keyword?	Result<PageInfo<User>>
+User(Web)	用户详情	/api/web/users/{id}	GET	Path: id	Result<User>
+User(Web)	创建用户	/api/web/users/create	POST	Body: RegisterRequest	Result<Void>
+User(Web)	更新用户	/api/web/users/{id}	PUT	Path: id; Body: User	Result<Void>
+User(Web)	删除用户	/api/web/users/{id}	DELETE	Path: id	Result<Void>
+User(Web)	重置密码	/api/web/users/{id}/reset-password	POST	Path: id	Result<Void>
+Reservoir(通用)	获取全部水库	/api/reservoirs	GET	无	Result<List<Reservoir>>
+Reservoir(通用)	水库详情	/api/reservoirs/{id}	GET	Path: id	Result<Reservoir>
+Reservoir(通用)	创建水库	/api/reservoirs	POST	Body: Reservoir	Result<Reservoir>
+Reservoir(通用)	更新水库	/api/reservoirs/{id}	PUT	Path: id; Body: Reservoir	Result<Reservoir>
+Reservoir(通用)	删除水库	/api/reservoirs/{id}	DELETE	Path: id	Result<Void>
+Reservoir(通用)	检查水库名称是否存在	/api/reservoirs/checkName	GET	Query: name	Result<Boolean>
+Reservoir(通用)	搜索水库	/api/reservoirs/search	GET	Query: keyword	Result<List<Reservoir>>
+Reservoir(通用)	Excel 导入	/api/reservoirs/import	POST	Form: file	Result<Map<String, Object>>
+Reservoir(通用)	导出水库数据	/api/reservoirs/export	GET	Query: format?(xlsx/csv)	文件流
+Reservoir(通用)	下载导入模板	/api/reservoirs/template/download	GET	无	.xlsx 文件流
+Reservoir(移动)	水库列表	/api/mobile/reservoirs	GET	无	Result<List<Reservoir>>
+Reservoir(移动)	水库详情	/api/mobile/reservoirs/{id}	GET	Path: id	Result<Reservoir>
+WaterQuality	水质列表	/api/water-quality	GET	无	Result<List<WaterQuality>>
+WaterQuality	水质详情	/api/water-quality/{id}	GET	Path: id	Result<WaterQuality>
+WaterQuality	按水库查水质	/api/water-quality/reservoir/{reservoirId}	GET	Path: reservoirId	Result<List<WaterQuality>>
+WaterQuality	创建水质记录	/api/water-quality	POST	Body: WaterQuality	Result<WaterQuality>
+WaterQuality	更新水质记录	/api/water-quality/{id}	PUT	Path: id; Body: WaterQuality	Result<WaterQuality>
+WaterQuality	删除水质记录	/api/water-quality/{id}	DELETE	Path: id	Result<Void>
+WaterSituation	水情列表（分页）	/api/waterSituation/list	GET	Query: page, pageSize, reservoirName?, startDate?, endDate? 及范围筛选	Result<PageInfo<WaterSituation>>
+WaterSituation	创建水情	/api/waterSituation/create	POST	Body: WaterSituation	Result<WaterSituation>
+WaterSituation	更新水情	/api/waterSituation/update	POST	Body: WaterSituation	Result<WaterSituation>
+WaterSituation	删除水情	/api/waterSituation/delete/{id}	DELETE	Path: id	Result<Void>
+WaterSituation	水情详情	/api/waterSituation/detail/{id}	GET	Path: id	Result<WaterSituation>
+WaterSituation	Excel 导入	/api/waterSituation/import	POST	Form: file	Result<List<WaterSituation>>
+WaterSituation	批量导入	/api/waterSituation/batchImport	POST	Form: file	Result<ImportResult<WaterSituation>>
+WaterSituation	检查库名是否存在	/api/waterSituation/checkReservoirName	GET	Query: reservoirName	Result<Boolean>
+WaterSituation	导出水情数据	/api/waterSituation/export	GET	Query: format?(xlsx/csv) + 筛选条件	文件流
+WaterSituation	下载导入模板	/api/waterSituation/template/download	GET	无	.xlsx 文件流
+SectionMonitor	监测数据列表	/api/sectionMonitor/list	GET	Query: page, pageSize, monitorPointName?, reservoirName? 及指标范围	Result<PageInfo<SectionMonitor>>
+SectionMonitor	创建监测记录	/api/sectionMonitor/create	POST	Body: SectionMonitor	Result<SectionMonitor>
+SectionMonitor	更新监测记录	/api/sectionMonitor/update	POST	Body: SectionMonitor	Result<SectionMonitor>
+SectionMonitor	删除监测记录	/api/sectionMonitor/delete/{id}	DELETE	Path: id	Result<Void>
+SectionMonitor	监测详情	/api/sectionMonitor/detail/{id}	GET	Path: id	Result<SectionMonitor>
+SectionMonitor	Excel 导入	/api/sectionMonitor/import	POST	Form: file	Result<List<SectionMonitor>>
+SectionMonitor	批量导入	/api/sectionMonitor/batchImport	POST	Form: file	Result<ImportResult<SectionMonitor>>
+SectionMonitor	检查监测点名称	/api/sectionMonitor/checkMonitorPointName	GET	Query: monitorPointName, reservoirName	Result<Boolean>
+SectionMonitor	导出监测数据	/api/sectionMonitor/export	POST	Query: format?(xlsx/csv)	文件流
+SectionMonitor	下载导入模板	/api/sectionMonitor/template	GET	无	.xlsx 文件流
+PatrolRecord(通用)	巡检签到	/api/patrol/checkin	POST	Body: { lat, lng, address, inspector, time? }	Result<Void>
+PatrolRecord(通用)	巡检记录列表	/api/patrol/records	GET	Query: page, pageSize, status?, inspector?, startDate?, endDate?	Result<PageInfo<PatrolRecord>>
+PatrolRecord(通用)	巡检记录详情	/api/patrol/records/{id}	GET	Path: id	Result<PatrolRecord>
+PatrolRecord(通用)	问题上报	/api/patrol/report	POST	Body: { reservoirName, description, photos, severity, reporterName, reporterRole, latitude, longitude }	Result<Void>
+PatrolRecord(通用)	任务派发	/api/patrol/assign	POST	Body: { recordId, inspector, note }	Result<Void>
+PatrolRecord(通用)	更新巡检记录	/api/patrol/records/{id}	PUT	Path: id; Body: PatrolRecord	Result<Void>
+PatrolRecord(通用)	更新巡检状态	/api/patrol/records/{id}/status	PUT	Path: id; Query: status, situationDescription?	Result<Void>
+PatrolRecord(通用)	删除巡检记录	/api/patrol/records/{id}	DELETE	Path: id	Result<Void>
+PatrolRecord(移动)	签到（移动）	/api/mobile/patrol/checkin	POST	Body: { lat, lng, address, inspector, time? }	Result<Void>
+PatrolRecord(移动)	巡检记录列表（移动）	/api/mobile/patrol/records	GET	Query: page, pageSize, status?, inspector?	Result<PageInfo<PatrolRecord>>
+PatrolRecord(移动)	巡检记录详情（移动）	/api/mobile/patrol/records/{id}	GET	Path: id	Result<PatrolRecord>
+PatrolRecord(移动)	上报问题（移动）	/api/mobile/patrol/report	POST	Body: { reservoirName, description, photos, severity, reporterName, reporterRole, latitude, longitude }	Result<Void>
+PatrolRecord(Web)	巡检记录列表	/api/web/patrol/records	GET	Query: page, pageSize, status?, inspector?, startDate?, endDate?	Result<PageInfo<PatrolRecord>>
+PatrolRecord(Web)	巡检记录详情	/api/web/patrol/records/{id}	GET	Path: id	Result<PatrolRecord>
+PatrolRecord(Web)	任务派发	/api/web/patrol/assign	POST	Body: { recordId, inspector, note }	Result<Void>
+PatrolRecord(Web)	更新巡检记录	/api/web/patrol/records/{id}	PUT	Path: id; Body: PatrolRecord	Result<Void>
+PatrolRecord(Web)	更新巡检状态	/api/web/patrol/records/{id}/status	PUT	Path: id; Query: status, situationDescription?	Result<Void>
+PatrolRecord(Web)	删除巡检记录	/api/web/patrol/records/{id}	DELETE	Path: id	Result<Void>
+InspectionTask(移动)	待办任务	/api/mobile/tasks/pending	GET	Query: inspectorId?, inspector?	Result<List<InspectionTask>>
+InspectionTask(移动)	任务列表	/api/mobile/tasks/list	GET	Query: page, pageSize, status?, assigneeId?, assigneeName?	Result<PageInfo<InspectionTask>>
+InspectionTask(移动)	任务详情	/api/mobile/tasks/{id}	GET	Path: id	Result<InspectionTask>
+InspectionTask(移动)	接受任务	/api/mobile/tasks/{id}/accept	POST	Query: assigneeId, assigneeName	Result<Void>
+InspectionTask(移动)	提交反馈	/api/mobile/tasks/{id}/feedback	POST	Body: { content, photos, inspector, inspectorUsername }	Result<Void>
+InspectionTask(移动)	完成任务	/api/mobile/tasks/{id}/complete	POST	Body: { processingResult, description? }	Result<Void>
+InspectionTask(Web)	任务列表	/api/web/tasks	GET	Query: 分页 + 筛选	Result<PageInfo<InspectionTask>>
+InspectionTask(Web)	创建任务	/api/web/tasks/create	POST	Body: CreateTaskRequest	Result<Void>
+InspectionTask(Web)	更新任务	/api/web/tasks/{id}	PUT	Path: id; Body: InspectionTask	Result<Void>
+InspectionTask(Web)	删除任务	/api/web/tasks/{id}	DELETE	Path: id	Result<Void>
+IssueReport(移动)	我的上报	/api/mobile/reports/my	GET	Query: reporter	Result<List<IssueReport>>
+IssueReport(移动)	待处理上报	/api/mobile/reports/pending	GET	无	Result<List<IssueReport>>
+IssueReport(移动)	上报详情（移动）	/api/mobile/reports/{id}	GET	Path: id	Result<IssueReport>
+IssueReport(移动)	创建上报（移动）	/api/mobile/reports	POST	Body: IssueReport	Result<Void>
+IssueReport(移动)	处理上报（移动）	/api/mobile/reports/{id}/process	POST	Body: { processingResult }	Result<Void>
+IssueReport(Web)	上报列表	/api/web/reports	GET	Query: page, pageSize, status?, severity?, startDate?, endDate?	Result<PageInfo<IssueReport>>
+IssueReport(Web)	创建上报	/api/web/reports	POST	Body: IssueReport	Result<Void>
+IssueReport(Web)	转为任务	/api/web/reports/{id}/to-task	POST	Body: { assigneeId, assigneeName, note }	Result<Void>
+IssueReport(Web)	标记解决	/api/web/reports/{id}/resolve	POST	Body: { processingResult }	Result<Void>
+IssueReport(Web)	指派处理人	/api/web/reports/{id}/assign	POST	Body: { assignedInspector, assignmentNote }	Result<Void>
+IssueReport(Web)	删除上报	/api/web/reports/{id}	DELETE	Path: id	Result<Void>
+WarningRecord(通用)	预警列表	/api/warnings	GET	Query: page, pageSize, level?, status?, startDate?, endDate?	Result<PageInfo<WarningRecord>>
+WarningRecord(通用)	预警详情	/api/warnings/{id}	GET	Path: id	Result<WarningRecord>
+WarningRecord(通用)	更新预警	/api/warnings/{id}	PUT	Path: id; Body: WarningRecord	Result<Void>
+WarningRecord(通用)	更新预警状态	/api/warnings/{id}/status	PUT	Path: id; Query: status	Result<Void>
+WarningRecord(通用)	删除预警	/api/warnings/{id}	DELETE	Path: id	Result<Void>
+WarningRecord(通用)	从监测数据生成预警	/api/warnings/generate	POST	无	Result<Void>
+WarningRecord(Web)	预警列表	/api/web/warnings	GET	Query: page, pageSize, level?, status?	Result<PageInfo<WarningRecord>>
+WarningRecord(Web)	预警详情	/api/web/warnings/{id}	GET	Path: id	Result<WarningRecord>
+WarningRecord(Web)	更新预警	/api/web/warnings/{id}	PUT	Path: id; Body: WarningRecord	Result<Void>
+WarningRecord(Web)	更新预警状态	/api/web/warnings/{id}/status	PUT	Path: id; Query: status	Result<Void>
+WarningRecord(Web)	删除预警	/api/web/warnings/{id}	DELETE	Path: id	Result<Void>
+WarningThreshold(通用)	获取预警阈值	/api/warning-thresholds	GET	无	Result<WarningThreshold>
+WarningThreshold(通用)	更新预警阈值	/api/warning-thresholds	PUT	Body: WarningThreshold	Result<Void>
+WarningThreshold(Web)	获取预警阈值	/api/web/warning-thresholds	GET	无	Result<WarningThreshold>
+WarningThreshold(Web)	更新预警阈值	/api/web/warning-thresholds	PUT	Body: WarningThreshold	Result<Void>
+Role(通用)	角色列表	/api/roles	GET	无	Result<List<Role>>
+Role(通用)	角色详情	/api/roles/{id}	GET	Path: id	Result<Role>
+Role(通用)	创建角色	/api/roles	POST	Body: Role	Result<Role>
+Role(通用)	更新角色	/api/roles/{id}	PUT	Path: id; Body: Role	Result<Role>
+Role(通用)	删除角色	/api/roles/{id}	DELETE	Path: id	Result<Void>
+Role(Web)	角色列表	/api/web/roles	GET	无	Result<List<Role>>
+Role(Web)	角色详情	/api/web/roles/{id}	GET	Path: id	Result<Role>
+Role(Web)	创建角色	/api/web/roles/create	POST	Body: Role	Result<Void>
+Role(Web)	更新角色权限	/api/web/roles/{id}/permissions	PUT	Path: id; Body: Role	Result<Void>
+Role(Web)	删除角色	/api/web/roles/{id}	DELETE	Path: id	Result<Void>
+LayerConfig(通用)	获取全部图层配置	/api/layer-configs	GET	无	Result<List<LayerConfig>>
+LayerConfig(通用)	批量更新图层配置	/api/layer-configs	PUT	Body: List<LayerConfig>	Result<Void>
+LayerConfig(通用)	获取图层类型列表	/api/layer-configs/types	GET	无	Result<List<String>>
+LayerConfig(Web)	获取图层配置列表	/api/web/layer-configs	GET	无	Result<List<LayerConfig>>
+LayerConfig(Web)	更新图层配置	/api/web/layer-configs	PUT	Body: List<LayerConfig>	Result<Void>
+SimulationConfig	配置列表	/api/simulation-configs	GET	无	Result<List<SimulationConfig>>
+SimulationConfig	默认配置	/api/simulation-configs/default	GET	无	Result<SimulationConfig>
+SimulationConfig	创建配置	/api/simulation-configs	POST	Body: SimulationConfig	Result<SimulationConfig>
+SimulationConfig	更新配置	/api/simulation-configs/{id}	PUT	Path: id; Body: SimulationConfig	Result<Void>
+SimulationConfig	删除配置	/api/simulation-configs/{id}	DELETE	Path: id	Result<Void>
+SimulationConfig	设为默认	/api/simulation-configs/{id}/set-default	PUT	Path: id	Result<Void>
+Dashboard	统计概览	/api/dashboard/stats	GET	无	Result<DashboardStats>
+Dashboard	水质趋势	/api/dashboard/water-quality/trend	GET	Query: reservoirId?, startDate?, endDate?	Result<List<WaterQualityTrend>>
+Dashboard	最新预警	/api/dashboard/warnings/latest	GET	Query: limit(默认5)	Result<List<WarningRecord>>
+Dashboard	巡检统计	/api/dashboard/patrol/stats	GET	Query: date?	Result<Map<String, Object>>
+Map	地图要素 GeoJSON	/api/map/features	GET	Query: type?	{ type, data, message }
+Map	水库点位 GeoJSON	/api/map/features/reservoirs	GET	无	{ data: GeoJSON }
+Map	监测点 GeoJSON	/api/map/features/monitor-points	GET	Query: reservoirName?	{ data: GeoJSON }

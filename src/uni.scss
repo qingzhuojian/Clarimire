@@ -1,0 +1,35 @@
+/* uni-app 全局样式变量 */
+
+/* 主题色 */
+$uni-color-primary: #7dd3fc;
+$uni-color-success: #4ade80;
+$uni-color-warning: #e8b86a;
+$uni-color-error: #f87171;
+
+/* 文字颜色 */
+$uni-text-color: #ffffff;
+$uni-text-color-inverse: #000000;
+$uni-text-color-grey: #b4caea;
+$uni-text-color-placeholder: rgba(210, 225, 250, 0.72);
+
+/* 背景颜色 */
+$uni-bg-color: #02060f;
+$uni-bg-color-grey: #0a1734;
+$uni-bg-color-hover: #102248;
+$uni-bg-color-mask: rgba(0, 0, 0, 0.7);
+
+/* 边框颜色 */
+$uni-border-color: rgba(70, 120, 210, 0.11);
+
+/* 间距 */
+$uni-spacing-sm: 16rpx;
+$uni-spacing-base: 24rpx;
+$uni-spacing-lg: 32rpx;
+
+/* 圆角 */
+$uni-border-radius-sm: 10rpx;
+$uni-border-radius-base: 14rpx;
+$uni-border-radius-lg: 20rpx;
+
+/* 阴影 */
+$uni-shadow-base: 0 28rpx 90rpx rgba(0, 8, 35, 0.62);
