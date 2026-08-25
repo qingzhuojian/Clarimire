@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clarimire.mapper.PatrolRecordMapper">
+    <resultMap id="BaseResultMap" type="com.clarimire.entity.PatrolRecord">
+        <id column="id" property="id"/>
+        <result column="task_id" property="taskId"/>
+        <result column="user_id" property="userId"/>
+        <result column="username" property="username"/>
+        <result column="real_name" property="realName"/>
+        <result column="reservoir_name" property="reservoirName"/>
+        <result column="lat" property="lat"/>
+        <result column="lng" property="lng"/>
+        <result column="location_zone" property="locationZone"/>
+        <result column="checkin_mode" property="checkinMode"/>
+        <result column="distance_m" property="distanceM"/>
+        <result column="photos" property="photos"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="findList" resultMap="BaseResultMap">
+        SELECT * FROM patrol_record
+        <where>
+            <if test="userId != null">AND user_id = #{userId}</if>
+            <if test="reservoirName != null and reservoirName != ''">AND reservoir_name = #{reservoirName}</if>
+            <if test="locationZone != null and locationZone != ''">AND location_zone = #{locationZone}</if>
+            <if test="startDate != null and startDate != ''">AND create_time &gt;= #{startDate}</if>
+            <if test="endDate != null and endDate != ''">AND create_time &lt;= #{endDate}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM patrol_record WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO patrol_record (task_id, user_id, username, real_name, reservoir_name, lat, lng,
+            location_zone, checkin_mode, distance_m, photos, remark)
+        VALUES (#{taskId}, #{userId}, #{username}, #{realName}, #{reservoirName}, #{lat}, #{lng},
+            #{locationZone}, #{checkinMode}, #{distanceM}, #{photos}, #{remark})
+    </insert>
+
+    <select id="countTodayByUser" resultType="int">
+        SELECT COUNT(*) FROM patrol_record
+        WHERE user_id = #{userId} AND DATE(create_time) = CURDATE()
+    </select>
+
+    <select id="countByTaskId" resultType="int">
+        SELECT COUNT(*) FROM patrol_record WHERE task_id = #{taskId}
+    </select>
+</mapper>

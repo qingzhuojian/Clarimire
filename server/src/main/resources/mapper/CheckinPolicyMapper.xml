@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clarimire.mapper.CheckinPolicyMapper">
+    <resultMap id="PolicyMap" type="com.clarimire.entity.CheckinPolicy">
+        <id column="id" property="id"/>
+        <result column="core_radius_m" property="coreRadiusM"/>
+        <result column="buffer_radius_m" property="bufferRadiusM"/>
+        <result column="remote_enabled" property="remoteEnabled"/>
+        <result column="demo_mode" property="demoMode"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <resultMap id="LocationMap" type="com.clarimire.entity.ReservoirLocation">
+        <id column="id" property="id"/>
+        <result column="reservoir_name" property="reservoirName"/>
+        <result column="lat" property="lat"/>
+        <result column="lng" property="lng"/>
+    </resultMap>
+
+    <select id="getPolicy" resultMap="PolicyMap">
+        SELECT * FROM checkin_policy ORDER BY id LIMIT 1
+    </select>
+
+    <update id="updatePolicy">
+        UPDATE checkin_policy SET
+            core_radius_m = #{coreRadiusM},
+            buffer_radius_m = #{bufferRadiusM},
+            remote_enabled = #{remoteEnabled},
+            demo_mode = #{demoMode}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findAllLocations" resultMap="LocationMap">
+        SELECT * FROM reservoir_location ORDER BY reservoir_name
+    </select>
+
+    <select id="findByReservoirName" resultMap="LocationMap">
+        SELECT * FROM reservoir_location WHERE reservoir_name = #{reservoirName}
+    </select>
+</mapper>

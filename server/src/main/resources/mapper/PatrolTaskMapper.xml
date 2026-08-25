@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clarimire.mapper.PatrolTaskMapper">
+    <resultMap id="BaseResultMap" type="com.clarimire.entity.PatrolTask">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="task_type" property="taskType"/>
+        <result column="status" property="status"/>
+        <result column="reservoir_name" property="reservoirName"/>
+        <result column="assignee_id" property="assigneeId"/>
+        <result column="assignee_name" property="assigneeName"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="due_time" property="dueTime"/>
+        <result column="description" property="description"/>
+        <result column="warning_record_id" property="warningRecordId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="findList" resultMap="BaseResultMap">
+        SELECT * FROM patrol_task
+        <where>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="assigneeId != null">AND assignee_id = #{assigneeId}</if>
+            <if test="reservoirName != null and reservoirName != ''">AND reservoir_name = #{reservoirName}</if>
+            <if test="taskType != null and taskType != ''">AND task_type = #{taskType}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM patrol_task WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO patrol_task (title, task_type, status, reservoir_name, assignee_id, assignee_name,
+            created_by, due_time, description, warning_record_id)
+        VALUES (#{title}, #{taskType}, #{status}, #{reservoirName}, #{assigneeId}, #{assigneeName},
+            #{createdBy}, #{dueTime}, #{description}, #{warningRecordId})
+    </insert>
+
+    <update id="update">
+        UPDATE patrol_task SET
+            title = #{title},
+            task_type = #{taskType},
+            status = #{status},
+            reservoir_name = #{reservoirName},
+            assignee_id = #{assigneeId},
+            assignee_name = #{assigneeName},
+            due_time = #{dueTime},
+            description = #{description},
+            warning_record_id = #{warningRecordId}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM patrol_task WHERE id = #{id}
+    </delete>
+
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(*) FROM patrol_task WHERE status = #{status}
+    </select>
+</mapper>

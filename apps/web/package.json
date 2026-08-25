@@ -1,0 +1,32 @@
+{
+  "name": "clarimire-web",
+  "version": "1.0.0",
+  "description": "清浊鉴——水环境风险监测与智能预警系统 · Web",
+  "type": "module",
+  "scripts": {
+    "copy:geoscene": "robocopy node_modules\\@geoscene\\core\\assets public\\assets /E /NFL /NDL /NJH /NJS /nc /ns /np || exit 0",
+    "predev": "npm run copy:geoscene",
+    "prebuild": "npm run copy:geoscene",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@geoscene/core": "^5.0.24",
+    "@element-plus/icons-vue": "^2.3.2",
+    "axios": "^1.5.0",
+    "echarts": "^5.6.0",
+    "element-plus": "^2.10.6",
+    "vue": "^3.3.4",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "@vue/runtime-core": "^3.5.19",
+    "vite": "^4.4.9"
+  },
+  "keywords": ["vue", "geoscene", "water-pollution", "simulation"],
+  "author": "Clarimire",
+  "license": "MIT"
+}

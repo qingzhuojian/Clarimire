@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clarimire.mapper.WaterReservoirMapper">
+    <resultMap id="BaseResultMap" type="com.clarimire.entity.WaterReservoir">
+        <id column="id" property="id"/>
+        <result column="reservoir_name" property="reservoirName"/>
+        <result column="short_name" property="shortName"/>
+        <result column="location" property="location"/>
+        <result column="capacity" property="capacity"/>
+        <result column="flood_level" property="floodLevel"/>
+        <result column="max_level" property="maxLevel"/>
+        <result column="avg_level" property="avgLevel"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM water_reservoir WHERE status = 1 ORDER BY reservoir_name
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM water_reservoir WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO water_reservoir (reservoir_name, location, capacity, flood_level, normal_level, type, status)
+        VALUES (#{reservoirName}, #{location}, #{capacity}, #{floodLevel}, #{normalLevel}, #{type}, #{status})
+    </insert>
+
+    <update id="update">
+        UPDATE water_reservoir SET
+            reservoir_name = #{reservoirName},
+            location = #{location},
+            capacity = #{capacity},
+            flood_level = #{floodLevel},
+            normal_level = #{normalLevel},
+            type = #{type},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM water_reservoir WHERE id = #{id}
+    </delete>
+</mapper>

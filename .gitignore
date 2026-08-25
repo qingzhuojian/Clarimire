@@ -1,0 +1,65 @@
+# ===== 基础 =====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.lnk
+.idea/
+*.iml
+.vscode/
+*.swp
+*~
+
+# 日志与临时
+*.log
+logs/
+*.tmp
+*.bak
+*.backup
+*.orig
+
+# ===== 前端依赖与构建产物 =====
+apps/web/node_modules/
+apps/mobile-h5/node_modules/
+apps/web/dist/
+apps/mobile-h5/dist/
+apps/web/.vite/
+apps/mobile-h5/.vite/
+apps/web/.cache/
+apps/web/.eslintcache
+
+# 环境变量（含密钥，仅提交 .env.example）
+apps/web/.env
+apps/web/.env.local
+apps/web/.env.*.local
+apps/mobile-h5/.env
+apps/mobile-h5/.env.local
+apps/mobile-h5/.env.*.local
+
+# ===== 后端 =====
+server/target/
+server/*.jar
+server/*.war
+server/*.ear
+server/.mvn/wrapper/maven-wrapper.jar
+server/.project
+server/.classpath
+server/.settings/
+server/logs/
+
+# 运行时上传目录（保留目录占位 .gitkeep）
+server/uploads/**
+!server/uploads/.gitkeep
+uploads/
+
+# ===== SQL 临时审计产物 =====
+sql/*.log
+sql/bad_rows.txt
+sql/corrupt_report.txt
+sql/hex_*.txt
+
+# ===== 本地私密备忘（勿上传） =====
+账号密码.txt
+**/账号密码.txt
+.env
+.env.*
+!.env.example

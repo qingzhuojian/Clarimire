@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clarimire.mapper.WarningRecordMapper">
+    <resultMap id="BaseResultMap" type="com.clarimire.entity.WarningRecord">
+        <id column="id" property="id"/>
+        <result column="reservoir_name" property="reservoirName"/>
+        <result column="warning_type" property="warningType"/>
+        <result column="warning_level" property="warningLevel"/>
+        <result column="indicator" property="indicator"/>
+        <result column="current_value" property="currentValue"/>
+        <result column="threshold_value" property="thresholdValue"/>
+        <result column="description" property="description"/>
+        <result column="suggestion" property="suggestion"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        SELECT * FROM warning_record WHERE 1=1
+        <if test="reservoirName != null and reservoirName != ''">
+            AND reservoir_name = #{reservoirName}
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO warning_record
+        (reservoir_name, warning_type, warning_level, indicator, current_value, threshold_value, description, suggestion)
+        VALUES
+        (#{reservoirName}, #{warningType}, #{warningLevel}, #{indicator}, #{currentValue}, #{thresholdValue}, #{description}, #{suggestion})
+    </insert>
+</mapper>

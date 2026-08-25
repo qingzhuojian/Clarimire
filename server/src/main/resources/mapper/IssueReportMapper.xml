@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.clarimire.mapper.IssueReportMapper">
+    <resultMap id="BaseResultMap" type="com.clarimire.entity.IssueReport">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="issue_type" property="issueType"/>
+        <result column="status" property="status"/>
+        <result column="reporter_id" property="reporterId"/>
+        <result column="reporter_name" property="reporterName"/>
+        <result column="reservoir_name" property="reservoirName"/>
+        <result column="lat" property="lat"/>
+        <result column="lng" property="lng"/>
+        <result column="description" property="description"/>
+        <result column="photos" property="photos"/>
+        <result column="assigned_to" property="assignedTo"/>
+        <result column="assigned_name" property="assignedName"/>
+        <result column="patrol_task_id" property="patrolTaskId"/>
+        <result column="admin_remark" property="adminRemark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="findList" resultMap="BaseResultMap">
+        SELECT * FROM issue_report
+        <where>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+            <if test="issueType != null and issueType != ''">AND issue_type = #{issueType}</if>
+            <if test="reporterId != null">AND reporter_id = #{reporterId}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM issue_report WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO issue_report (title, issue_type, status, reporter_id, reporter_name, reservoir_name,
+            lat, lng, description, photos, assigned_to, assigned_name, patrol_task_id, admin_remark)
+        VALUES (#{title}, #{issueType}, #{status}, #{reporterId}, #{reporterName}, #{reservoirName},
+            #{lat}, #{lng}, #{description}, #{photos}, #{assignedTo}, #{assignedName}, #{patrolTaskId}, #{adminRemark})
+    </insert>
+
+    <update id="update">
+        UPDATE issue_report SET
+            title = #{title},
+            issue_type = #{issueType},
+            status = #{status},
+            reservoir_name = #{reservoirName},
+            lat = #{lat},
+            lng = #{lng},
+            description = #{description},
+            photos = #{photos},
+            assigned_to = #{assignedTo},
+            assigned_name = #{assignedName},
+            patrol_task_id = #{patrolTaskId},
+            admin_remark = #{adminRemark}
+        WHERE id = #{id}
+    </update>
+
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(*) FROM issue_report WHERE status = #{status}
+    </select>
+</mapper>

@@ -1,0 +1,34 @@
+:root {
+  /* 沉稳湖蓝：巡查/水务主色 */
+  --color-primary: #2563eb;
+  --color-primary-light: #eff6ff;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-soft: #60a5fa;
+  --color-bg-page: #f4f6fa;
+  --color-bg-card: #ffffff;
+  --color-bg-muted: #f8fafc;
+  --color-border: #e8edf5;
+  --color-text: #1e293b;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+  --color-success: #389e0d;
+  --color-success-bg: #e6f7e6;
+  --color-warning: #d48806;
+  --color-warning-bg: #fff7e6;
+  --color-danger: #cf1322;
+  --color-danger-bg: #fff1f0;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 2px 12px rgba(37, 99, 235, 0.06);
+  --shadow-header: 0 1px 4px rgba(15, 23, 42, 0.04);
+  --shadow-primary: 0 4px 14px rgba(37, 99, 235, 0.22);
+  --space-xs: 6px;
+  --space-sm: 10px;
+  --space-md: 16px;
+  --space-lg: 20px;
+  --space-xl: 24px;
+  --header-height: 52px;
+  --tabbar-height: 56px;
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}

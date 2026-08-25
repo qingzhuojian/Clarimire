@@ -1,0 +1,82 @@
+.ops-page {
+  width: 100%;
+  min-height: calc(100vh - 56px);
+  padding: 20px 24px;
+  box-sizing: border-box;
+  background: #f0f2f5;
+}
+
+.ops-page .page-card {
+  width: 100%;
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.ops-page .toolbar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.ops-page .stats-row {
+  margin-bottom: 20px;
+}
+
+.ops-page :deep(.el-table) {
+  width: 100%;
+}
+
+.ops-page :deep(.el-table__header th) {
+  background: #fafafa !important;
+  color: #262626 !important;
+  font-weight: 600 !important;
+}
+
+.ops-page--center {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 32px;
+}
+
+.ops-page--center .policy-panel {
+  width: 50%;
+  min-width: 520px;
+  max-width: 760px;
+  padding: 36px 48px;
+}
+
+.ops-page--center .policy-panel :deep(.el-form-item__label) {
+  font-size: 15px;
+  color: #333;
+}
+
+.ops-page--center .policy-panel :deep(.el-input-number) {
+  width: 180px;
+}
+
+.ops-page--center .policy-panel :deep(.el-input-number .el-input__inner) {
+  font-size: 16px;
+}
+
+.ops-page--center .policy-panel :deep(.el-button) {
+  padding: 10px 28px;
+  font-size: 15px;
+}
+
+.ops-page--center .policy-hint {
+  color: #999;
+  font-size: 13px;
+  margin-left: 10px;
+}
+
+.ops-page--center .policy-note {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0;
+}

@@ -1,0 +1,740 @@
+/* 预警分析页 — 对齐 AquaGuardian PredictionSimulation 布局 */
+
+.warning-page {
+  flex: 1;
+  position: relative;
+  height: calc(100vh - 56px);
+  background: #fff;
+  overflow: hidden;
+}
+
+.warning-page-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.warning-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 模式切换 */
+.mode-panel {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
+  padding: 12px 16px;
+  z-index: 1200;
+}
+
+.mode-panel .mode-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.mode-panel .mode-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-panel .mode-btn {
+  border: 1px solid #1976d2;
+  background: #fff;
+  color: #1976d2;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-panel .mode-btn.active {
+  background: #1976d2;
+  color: #fff;
+}
+
+.mode-panel .mode-btn:hover:not(.active) {
+  background: #e3f2fd;
+}
+
+.map-tip-bar {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(25, 118, 210, 0.92);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  z-index: 1100;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* 图层控制 */
+.control-panel {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 16px 20px;
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 260px;
+}
+
+.control-panel h3 {
+  margin: 0 0 10px;
+  color: #333;
+  font-size: 15px;
+}
+
+.control-panel .layer-control {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.control-panel .layer-control:last-child {
+  margin-bottom: 0;
+}
+
+.control-panel .layer-control label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.control-panel .layer-control input[type='checkbox'] {
+  margin-right: 8px;
+}
+
+.control-panel .color-preview {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #ddd;
+}
+
+/* 右侧评估面板 */
+.right-statusbar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 400px;
+  max-height: calc(100% - 120px);
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.13);
+  padding: 16px 18px 12px;
+  z-index: 1200;
+}
+
+.status-section {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.status-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.status-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1976d2;
+  margin-bottom: 10px;
+}
+
+.status-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.collapse-btn {
+  border: none;
+  background: transparent;
+  color: #1677ff;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  font-weight: 500;
+}
+
+.collapse-btn:hover {
+  text-decoration: underline;
+}
+
+.reservoir-summary {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: #f5f9ff;
+  border: 1px solid #d6e4ff;
+  border-radius: 8px;
+}
+
+.summary-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f1f1f;
+  margin-bottom: 8px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summary-label {
+  font-size: 11px;
+  color: #8c8c8c;
+}
+
+.summary-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1677ff;
+}
+
+.summary-hint {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #8c8c8c;
+  line-height: 1.4;
+}
+
+.status-content {
+  font-size: 14px;
+  color: #333;
+}
+
+.warning-page .form-row {
+  margin-bottom: 12px;
+}
+
+.warning-page .form-row label {
+  display: block;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.warning-page .form-row .form-value {
+  width: 100%;
+}
+
+.warning-page .evaluate-btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.warning-page .result-snippet {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.warning-page .result-snippet.normal {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.warning-page .result-snippet.warning {
+  background: #fff3cd;
+  color: #f57c00;
+}
+
+.warning-page .result-snippet.danger {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.warning-page .detail-link {
+  margin-top: 8px;
+  color: #1976d2;
+  font-size: 13px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.warning-page .goto-sim-btn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.warning-page .warning-table-wrap {
+  max-height: 220px;
+  overflow: auto;
+}
+
+/* 图例 */
+.legend-container {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px 16px;
+  z-index: 1000;
+  min-width: 160px;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.legend-color.danger-color {
+  background-color: #f44336;
+}
+
+.legend-color.warning-color {
+  background-color: #ffa500;
+}
+
+.legend-color.normal-color {
+  background-color: #2196f3;
+}
+
+.legend-color.env-yellow {
+  background-color: #ffeb3b;
+}
+
+.legend-color.env-orange {
+  background-color: #ff9800;
+}
+
+.legend-color.env-red {
+  background-color: #f44336;
+}
+
+.legend-text {
+  font-size: 12px;
+  color: #333;
+}
+
+/* 加载与错误 */
+.warning-page .loading-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: 8px;
+  z-index: 2000;
+  font-size: 15px;
+}
+
+.warning-page .layer-error {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff7e6;
+  color: #ad6800;
+  border: 1px solid #ffd591;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 1500;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* 分析弹窗 */
+.analysis-modal {
+  position: fixed;
+  inset: 0;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.analysis-modal-content {
+  background: #fff;
+  border-radius: 8px;
+  width: 450px;
+  max-width: 85vw;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  position: relative;
+  cursor: default;
+  pointer-events: auto;
+  border: 2px solid rgba(25, 118, 210, 0.2);
+}
+
+.analysis-modal.plan-modal {
+  z-index: 10001;
+}
+
+.analysis-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  background: #1976d2;
+  color: #fff;
+  border-radius: 8px 8px 0 0;
+  cursor: move;
+  user-select: none;
+  position: relative;
+}
+
+.analysis-modal-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+}
+
+.drag-handle {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.drag-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  width: 16px;
+  height: 12px;
+}
+
+.drag-dots span {
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.analysis-modal-body {
+  padding: 20px;
+}
+
+.status-display-section {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.status-indicator {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.status-normal {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-warning {
+  background: #fff3cd;
+  color: #f57c00;
+}
+
+.status-danger {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.water-level-comparison h5,
+.analysis-summary h5,
+.emergency-measures h5,
+.current-level-info h5 {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+.comparison-table {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.comparison-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+
+.comparison-row:last-child {
+  border-bottom: none;
+}
+
+.comparison-row.header {
+  background: #f5f7fa;
+  font-weight: 600;
+  color: #666;
+}
+
+.comparison-row .label {
+  flex: 1;
+  color: #666;
+}
+
+.comparison-row .value {
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+}
+
+.comparison-row .value.limit {
+  color: #ff9800;
+}
+
+.comparison-row .value.max {
+  color: #f44336;
+}
+
+.comparison-row .value.avg {
+  color: #4caf50;
+}
+
+.comparison-row .difference {
+  flex: 1;
+  text-align: right;
+  font-weight: 600;
+}
+
+.comparison-row .difference.above {
+  color: #f44336;
+}
+
+.comparison-row .difference.below {
+  color: #4caf50;
+}
+
+.analysis-summary {
+  margin-top: 20px;
+}
+
+.summary-content {
+  padding: 14px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  border-left: 4px solid #1976d2;
+}
+
+.emergency-plan-section {
+  margin-top: 16px;
+}
+
+.emergency-plan-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
+}
+
+.emergency-plan-btn.warning-plan {
+  background: #ff9800;
+}
+
+.emergency-plan-btn.danger-plan {
+  background: #f44336;
+}
+
+.emergency-plan-btn:hover {
+  opacity: 0.92;
+}
+
+.analysis-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.btn-close {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  padding: 10px 28px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  background: #1565c0;
+}
+
+.plan-info-section {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.plan-status-indicator {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.current-level-info {
+  margin-bottom: 16px;
+}
+
+.level-info-content {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.measures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.measure-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.measure-item.warning-measure {
+  background: #fff8e1;
+  border-left: 4px solid #ff9800;
+}
+
+.measure-item.danger-measure {
+  background: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.measure-item:hover {
+  filter: brightness(0.97);
+}
+
+.measure-number {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1976d2;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.measure-content {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+}
+
+@media (max-width: 900px) {
+  .right-statusbar {
+    width: 320px;
+  }
+
+  .control-panel {
+    top: 90px;
+    max-width: 200px;
+  }
+}

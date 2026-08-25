@@ -1,0 +1,30 @@
+# 编译输出
+target/
+build/
+*.class
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+
+# IDE
+.project
+.classpath
+.settings/
+*.iml
+
+# 日志
+*.log
+logs/
+
+# 打包文件
+*.jar
+*.war
+*.ear
+
+# 临时文件
+*.tmp
+*.bak
