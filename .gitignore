@@ -27,7 +27,7 @@ apps/mobile-h5/.vite/
 apps/web/.cache/
 apps/web/.eslintcache
 
-# 环境变量（含密钥，仅提交 .env.example）
+# 环境变量（提交 .env.example）
 apps/web/.env
 apps/web/.env.local
 apps/web/.env.*.local
@@ -57,7 +57,7 @@ sql/bad_rows.txt
 sql/corrupt_report.txt
 sql/hex_*.txt
 
-# ===== 本地私密备忘（勿上传） =====
+# ===== 本地备忘 =====
 账号密码.txt
 **/账号密码.txt
 .env

@@ -37,14 +37,14 @@ mvn spring-boot:run
 
 ```bash
 cd apps/web
-cp .env.example .env   # 按需填写 GeoScene / 天地图等
+cp .env.example .env
 npm install
 npm run dev
 ```
 
 访问：http://localhost:5173
 
-### 4. 移动端 H5（无需 HBuilderX）
+### 4. 移动端 H5
 
 ```bash
 cd apps/mobile-h5
@@ -53,7 +53,7 @@ npm install
 npm run dev
 ```
 
-访问：http://localhost:5174  
+访问：http://localhost:5174
 
 纯 H5，浏览器打开即可；正式环境 `npm run build` 后部署 `dist`。
 
@@ -65,9 +65,7 @@ npm run dev
 | 移动巡查员 | 日常/指派任务、打卡、突发上报、巡查记录 |
 | 移动群众 | 问题上报、进度查询 |
 
-## 注意事项
+## 说明
 
-- `apps/*/node_modules`、`server/target`、`*.env` 已在 `.gitignore`，勿提交密钥与依赖包。
-- 请勿把含真实密码的本地备忘（如 `账号密码.txt`）提交到公开仓库。
-- Web 地图依赖 GeoScene 服务；运维打卡/上报不依赖地图服务。
-- 移动端底图为高德瓦片（Leaflet），不强制天地图白名单。
+- Web 地图使用 GeoScene；移动端底图为 Leaflet + 高德瓦片。
+- 环境变量模板见 `apps/web/.env.example`、`apps/mobile-h5/.env.example`。
